@@ -99,7 +99,7 @@ class PostsController extends ApplicationComponent
         if ($id === 1) {
             $prevPost = 'post-' . ($id + 1);
             $nextPost = '#';
-            $begin = $nbTab + 1;
+            $begin = $nbTab + 2;
             $end = 1;
             $dotBefore = true;
         } elseif ($id === $nbPosts) {
@@ -110,7 +110,7 @@ class PostsController extends ApplicationComponent
             $dotAfter = true;
         } else {
             if ($id <= $nbTab / 2 ) {
-                $begin = $nbTab + 1;
+                $begin = $nbTab + 2;
                 $end = 1;
                 $dotBefore = true;
             } elseif ($id >= $nbPosts - $nbTab / 2) {

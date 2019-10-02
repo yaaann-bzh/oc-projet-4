@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="icon" href="http://projet4.yaaann.ovh/public/assets/quill-ink.png" sizes="32x32">
+    <!--Liens absolu pour la version locale : à modifier pour mise en ligne-->
+    <link rel="icon" href="http://blogecrivain/assets/quill-ink.png" sizes="32x32">
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" 
             integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" 
@@ -13,6 +14,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
             integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"    
             crossorigin="anonymous">
+
+    <!--Liens absolu pour la version locale : à modifier pour mise en ligne-->
+    <link rel="stylesheet" href="http://blogecrivain/assets/style.css">
 
     <title><?= $tabTitle; ?></title>
 </head>
