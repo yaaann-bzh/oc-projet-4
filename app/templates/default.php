@@ -21,11 +21,11 @@
         <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container">
                 <a class="navbar-brand" href="/">J. Forteroche</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse">
+                <div class="collapse navbar-collapse" id="navbarsExample07" style="">
                     <ul class="navbar-nav mr-auto">
                         <!--Prévoir le changement de classe des liens pour activation (si besoin)-->
                         <li class="nav-item active">
@@ -36,8 +36,8 @@
                         </li>
                     </ul>
                     <ul class="navbar-nav" id="user">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="#"><i class="fas fa-user-alt"></i> Connection</a>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"><i class="fas fa-user-alt"></i> Se connecter</a>
                         </li>
                     </ul>
                 </div>
@@ -46,17 +46,25 @@
         </nav>
     </header>
    
-    <?php //var_dump($tabTitle);?>
-
-    <div class="container" id="top-page">
+    <div id="top-page">
         <?= $content; ?>
         <hr class="featurette-divider">
     </div>
 
     <footer class="container">
         <p class="float-right"><a href="#top-page">Haut de page</a></p>
-        <p> 2019 - Yaaann · <a href="https://www.yaaann.ovh">Mes autres projet</a> · <a href="https://openclassrooms.com/fr/">OpenClassrooms</a></p>
+        <p> 2019 - Yaaann · <a href="https://www.yaaann.ovh">Mes autres projets</a> · <a href="https://openclassrooms.com/fr/">OpenClassrooms</a></p>
     </footer>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" 
+            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" 
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" 
+            integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" 
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" 
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" 
+            crossorigin="anonymous"></script>
     
 </body>
 </html>
