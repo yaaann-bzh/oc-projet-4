@@ -29,7 +29,8 @@ class HTTPResponse extends ApplicationComponent
         // Ce fichier contient le message d'erreur formaté. Vous pouvez placer tous ces fichiers dans le dossier /Errors par exemple, sous le nom code.html.
         // Le chemin menant au fichier contenant l'erreur 404 sera donc /Errors/404.html.
         $this->page->setContent(__DIR__.'/../../Errors/404.html');
-        
+        $this->page->setTabTitle('Erreur 404');
+
         // On ajoute un header disant que le document est non trouvé (HTTP/1.0 404 Not Found).
         $this->addHeader('HTTP/1.0 404 Not Found');
         

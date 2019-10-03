@@ -4,13 +4,21 @@ namespace framework;
 class Page
 {
     protected $tabTitle;
+    protected $activeNav;
     protected $content;
     protected $vars = [];
     
+    public function setActiveNav(string $nav)
+    {
+        $this->activeNav = $nav;
+        $this->addVars('activeNav', $this->activeNav);
+    }
+
     public function setTabTitle(string $title)
     {
         $this->tabTitle = $title;
         $this->tabTitle .= ' | Blog de jean Forteroche';
+        $this->addVars('tabTitle', $this->tabTitle);
     }
 
     public function getTabTitle()
@@ -25,6 +33,10 @@ class Page
 
     public function generate()
     {
+        if ($this->activeNav === null) {
+            $this->setActiveNav('');
+        }
+
         if (!file_exists($this->content))
         {
             throw new \RuntimeException('La vue spécifiée n\'existe pas');

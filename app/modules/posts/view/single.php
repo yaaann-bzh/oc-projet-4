@@ -42,8 +42,30 @@
             </nav>
             <div class="border p-3">
                 <h1 class="display-5"><?= $post->title(); ?></h1>
-                <hr class="featurette-divider">
+                <p> 
+                    <em>Publié le <?= $post->addDate()->format('d/m/Y à H\hi'); ?></em>
+                    <?php
+                    if ($post->updateDate() !== null) { 
+                        echo '<em class="text-danger"> - Modifié le ' . $post->updateDate()->format('d/m/Y à H\hi') . '.</em>'; 
+                    } ?>                  
+                </p>
+                <hr class="my-4">
                 <p><?= $post->content(); ?></p>
+            </div>
+            <div class="p-3">
+                <?php
+                foreach ($comments as $comment ) {
+                ?>
+                <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
+                    <p>
+                        <strong><?= $comment->id(); ?></strong> - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
+                        if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
+                    </p>
+                    <p class="m-0"><?= $comment->content(); ?></p>
+                </div>
+                <?php
+                }
+                ?>         
             </div>
         </div>
     </div>

@@ -8,7 +8,7 @@ use framework\Manager;
 use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\model\PostManager;
-
+use forteroche\vendor\model\CommentManager;
 
 class PostsController extends ApplicationComponent
 {
@@ -16,13 +16,15 @@ class PostsController extends ApplicationComponent
     protected $module = '';
     protected $page = null;
     protected $view = '';
-    protected $manager = null;
+    protected $postManager = null;
+    protected $commentManager = null;
 
     public function __construct(Application $app, $module, $action)
     {
         parent::__construct($app);
 
-        $this->manager = new PostManager(PDOFactory::getMysqlConnexion());
+        $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
+        $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
         $this->page = new Page;
         $this->module = $module;
         $this->action = $action;
@@ -49,7 +51,7 @@ class PostsController extends ApplicationComponent
     public function executeIndex(HTTPRequest $request)
     {
         $nbPosts = 5;
-        $nbPages = (int)ceil($this->manager->count() / $nbPosts);//Arrondi au nombre entier supérieur
+        $nbPages = (int)ceil($this->postManager->count() / $nbPosts);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 
         $index = (int)$request->getData('index');
@@ -76,12 +78,19 @@ class PostsController extends ApplicationComponent
         $this->page->addVars('prevIndex', $prevIndex);
         $this->page->addVars('nextIndex', $nextIndex);
 
-        $postsList = $this->manager->getList($begin, $nbPosts);
+        $postsList = $this->postManager->getList($begin, $nbPosts);
+        if (empty($postsList)) {
+            $this->app->httpResponse()->redirect404();
+        }
         $this->page->addVars('postsList', $postsList);
 
+        foreach ($postsList as $post) {  
+            $nbComments[$post->id()] = $this->commentManager->count($post->id());
+        }
+        $this->page->addVars('nbComments', $nbComments);
+
         $this->page->setTabTitle('Accueil');
-        $tabTitle = $this->page->getTabTitle();
-        $this->page->addVars('tabTitle', $tabTitle);
+        $this->page->setActiveNav('home');
 
         $this->page->setContent(__DIR__.'/view/index.php');
         $this->page->generate();
@@ -90,8 +99,12 @@ class PostsController extends ApplicationComponent
     public function executeShow(HTTPRequest $request)
     {
         $id = (int)$request->getData('id');
-        $post = $this->manager->getSingle($id);
-        $nbPosts = $this->manager->count();
+        $post = $this->postManager->getSingle($id);
+        if (empty($post)) {
+            $this->app->httpResponse()->redirect404();
+        }
+        $comments = $this->commentManager->getByPost($id);
+        $nbPosts = $this->postManager->count();
         $nbTab = 4;
         $dotBefore = false;
         $dotAfter = false;
@@ -128,6 +141,8 @@ class PostsController extends ApplicationComponent
         }
 
         $this->page->addVars('post', $post);
+        $this->page->addVars('comments', $comments);
+
         $this->page->addVars('prevPost', $prevPost);
         $this->page->addVars('nextPost', $nextPost);
         $this->page->addVars('begin', $begin);
@@ -136,8 +151,6 @@ class PostsController extends ApplicationComponent
         $this->page->addVars('dotAfter', $dotAfter);
 
         $this->page->setTabTitle($post->title());
-        $tabTitle = $this->page->getTabTitle();
-        $this->page->addVars('tabTitle', $tabTitle);
 
         $this->page->setContent(__DIR__.'/view/single.php');
         $this->page->generate();

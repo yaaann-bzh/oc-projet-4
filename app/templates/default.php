@@ -28,15 +28,15 @@
                 <div class="collapse navbar-collapse" id="navbarsExample07" style="">
                     <ul class="navbar-nav mr-auto">
                         <!--Prévoir le changement de classe des liens pour activation (si besoin)-->
-                        <li class="nav-item active">
+                        <li class="nav-item <?php if ($activeNav === 'home') { echo ' active'; } ?>">
                             <a class="nav-link" href="/"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#"><i class="far fa-comment-dots"></i> Derniers commentaires</a>
+                        <li class="nav-item <?php if ($activeNav === 'comments') { echo ' active'; } ?>">
+                            <a class="nav-link" href="/comments-index-1"><i class="far fa-comment-dots"></i> Derniers commentaires</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav" id="user">
-                        <li class="nav-item">
+                        <li class="nav-item <?php if ($activeNav === 'connect') { echo ' active'; } ?>">
                             <a class="nav-link" href="#"><i class="fas fa-user-alt"></i> Se connecter</a>
                         </li>
                     </ul>
