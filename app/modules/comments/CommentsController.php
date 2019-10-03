@@ -76,7 +76,7 @@ class CommentsController extends ApplicationComponent
         $this->page->addVars('nextIndex', $nextIndex);
 
         $comments = $this->commentManager->getList($begin, $nbComments);
-        if (empty($comments)) {
+        if ($index !== 1 AND empty($comments)) {
             $this->app->httpResponse()->redirect404();
         }
         $this->page->addVars('comments', $comments);

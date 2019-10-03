@@ -50,11 +50,13 @@ class PostsController extends ApplicationComponent
 
     public function executeIndex(HTTPRequest $request)
     {
+        // Insérer redirection vers index-1 si url ='/'
         $nbPosts = 5;
         $nbPages = (int)ceil($this->postManager->count() / $nbPosts);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 
         $index = (int)$request->getData('index');
+    
         if ($index === null OR $index === 0) {
             $index = 1;
         }
@@ -79,11 +81,12 @@ class PostsController extends ApplicationComponent
         $this->page->addVars('nextIndex', $nextIndex);
 
         $postsList = $this->postManager->getList($begin, $nbPosts);
-        if (empty($postsList)) {
+        if ($request->getData('index') !== null AND empty($postsList)) {
             $this->app->httpResponse()->redirect404();
         }
         $this->page->addVars('postsList', $postsList);
 
+        $nbComments = [];
         foreach ($postsList as $post) {  
             $nbComments[$post->id()] = $this->commentManager->count($post->id());
         }

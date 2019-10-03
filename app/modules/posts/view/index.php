@@ -40,7 +40,7 @@
                     <div class="d-flex justify-content-between">
                         <h2><a href="post-<?= $post->id(); ?>"><?= $post->id(); ?> - <?= $post->title(); ?></a></h2>
                         <span>
-                            <span class="badge badge-primary badge-pill"><?= $nbComments[$post->id()]; ?></span>
+                            <span title="Commentaires" class="badge badge-primary badge-pill"><?= $nbComments[$post->id()]; ?></span>
                             <button class="collapsed btn btn-light" type="button" data-toggle="collapse" data-target="#postContent-<?= $post->id(); ?>" aria-controls="postContent-<?= $post->id(); ?>" aria-expanded="false" aria-label="Toggle">
                                 <i class="fas fa-chevron-down fa-2x"></i>
                             </button>
