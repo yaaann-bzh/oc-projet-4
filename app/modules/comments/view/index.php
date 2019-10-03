@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container pt-5">
     <div class="row">
         <div class="col-12 col-md-8">
             <h1 class="display-5">Derniers commentaires</h1>
@@ -30,10 +30,11 @@
             foreach ($comments as $comment) {
                 ?>
                 <div class="border p-3 mb-3 bg-light">
-                    <p>
+                    <p class="mb-1">
                         <strong><?= $comment->id(); ?></strong> - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
                         if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
                     </p>
+                    <p class="mb-2"><em>dans <a href="/post-<?= $comment->postId(); ?>#comment-<?= $comment->id(); ?>"><?= $posts[$comment->id()]; ?></a></em></p>
                     <p class="m-0"><?= $comment->content(); ?></p>
                 </div>
             <?php

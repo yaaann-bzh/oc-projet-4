@@ -79,7 +79,15 @@ class CommentsController extends ApplicationComponent
         if ($index !== 1 AND empty($comments)) {
             $this->app->httpResponse()->redirect404();
         }
+
+        $posts = [];
+        foreach ($comments as $comment) {
+            $post = $this->postManager->getSingle($comment->postId());
+            $posts[$comment->id()] = $post->title();
+        }
+
         $this->page->addVars('comments', $comments);
+        $this->page->addVars('posts', $posts);
 
         $this->page->setTabTitle('Derniers commentaires');
         $this->page->setActiveNav('comments');
