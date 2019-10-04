@@ -25,12 +25,12 @@ class CommentManager extends \framework\Manager
         return $comments;
     }
 
-    public function getList($debut, $limit, $userId = null)
+    public function getList($debut, $limit, $memberId = null)
     {
         $sql = 'SELECT * FROM comments';
 
-        if ($userId !== null) {
-            $sql .= ' WHERE userId=' . $userId;
+        if ($memberId !== null) {
+            $sql .= ' WHERE memberId=' . $memberId;
         }
 
         $sql .= ' ORDER BY addDate DESC';

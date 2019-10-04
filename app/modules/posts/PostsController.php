@@ -9,7 +9,7 @@ use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
-use forteroche\vendor\model\UserManager;
+use forteroche\vendor\model\MemberManager;
 
 class PostsController extends ApplicationComponent
 {
@@ -19,7 +19,7 @@ class PostsController extends ApplicationComponent
     protected $view = '';
     protected $postManager = null;
     protected $commentManager = null;
-    protected $userManager = null;
+    protected $memberManager = null;
 
     public function __construct(Application $app, $module, $action)
     {
@@ -27,8 +27,8 @@ class PostsController extends ApplicationComponent
 
         $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
         $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
-        $this->userManager = new UserManager(PDOFactory::getMysqlConnexion());
-        $this->page = new Page;
+        $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion());
+        $this->page = new Page($app);
         $this->module = $module;
         $this->action = $action;
         $this->view = $action;
@@ -111,9 +111,9 @@ class PostsController extends ApplicationComponent
         }
         $comments = $this->commentManager->getByPost($id);
         
-        $users = [];
+        $members = [];
         foreach ($comments as $comment ) {
-            $users[$comment->id()] = $this->userManager->getSingle($comment->userId());
+            $members[$comment->id()] = $this->memberManager->getSingle($comment->memberId());
         }
 
         $nbPosts = $this->postManager->count();
@@ -154,7 +154,7 @@ class PostsController extends ApplicationComponent
 
         $this->page->addVars('post', $post);
         $this->page->addVars('comments', $comments);
-        $this->page->addVars('users', $users);
+        $this->page->addVars('members', $members);
 
         $this->page->addVars('prevPost', $prevPost);
         $this->page->addVars('nextPost', $nextPost);

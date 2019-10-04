@@ -1,7 +1,7 @@
 <?php
 namespace framework;
 
-class Page
+class Page extends ApplicationComponent
 {
     protected $tabTitle;
     protected $activeNav;
@@ -41,6 +41,9 @@ class Page
         {
             throw new \RuntimeException('La vue spécifiée n\'existe pas');
         }
+
+        $user = $this->app->user();
+
         extract($this->vars);
 
         ob_start();

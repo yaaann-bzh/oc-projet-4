@@ -3,11 +3,11 @@
         <div class="col-12 col-md-8">
             <div class="border p-3 mb-3">   
                 <div class="d-flex align-items-end">                
-                    <h1 class="display-5 mb-0"><?= $user->pseudo(); ?></h1>
-                    <p class="mb-1 ml-2 badge badge-success"><?php if ($user->privilege() !== null) { echo $user->privilege(); } ?></p>
+                    <h1 class="h2 mb-0"><?= $member->pseudo(); ?></h1>
+                    <p class="mb-1 ml-2 badge badge-success"><?php if ($member->privilege() !== null) { echo $member->privilege(); } ?></p>
                 </div>         
 
-                <p class="ml-4 mb-0"><em>Inscrit(e) depuis le <?= $user->inscriptionDate()->format('d/m/Y'); ?></em></p>                
+                <p class="ml-4 mb-0"><em>Inscrit(e) depuis le <?= $member->inscriptionDate()->format('d/m/Y'); ?></em></p>                
             </div>
             <nav>
                 <ul class="pagination justify-content-center">
@@ -21,7 +21,7 @@
                         ?>
                         <li class="page-item 
                         <?php if ($index === $i) { echo ' active'; } ?>
-                        "><a class="page-link" href="user-<?=$user->id()?>-<?= $i; ?>"><?= $i; ?></a></li>
+                        "><a class="page-link" href="member-<?=$member->id()?>-<?= $i; ?>"><?= $i; ?></a></li>
                         <?php
                     }
                     ?>

@@ -1,7 +1,7 @@
 <section class="container pt-5">
     <div class="row">
         <div class="col-12 col-md-8">
-            <h1 class="display-5">Derniers commentaires</h1>
+            <h1 class="h2">Derniers commentaires</h1>
             <nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
@@ -31,8 +31,8 @@
                 ?>
                 <div class="border p-3 mb-3 bg-light">
                     <p class="mb-1">
-                        <strong><a href="/user-<?= $comment->userId(); ?>-1"><?= $users[$comment->id()]->pseudo(); ?></a></strong>
-                        <span class="mb-1 ml-2 badge badge-success"><?php if ($users[$comment->id()]->privilege() !== null) { echo $users[$comment->id()]->privilege(); } ?></span>
+                        <strong><a href="/member-<?= $comment->memberId(); ?>-1"><?= $members[$comment->id()]->pseudo(); ?></a></strong>
+                        <span class="mb-1 ml-2 badge badge-success"><?php if ($members[$comment->id()]->privilege() !== null) { echo $members[$comment->id()]->privilege(); } ?></span>
                          - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
                         if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
                     </p>
