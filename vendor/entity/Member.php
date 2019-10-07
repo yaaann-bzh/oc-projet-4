@@ -1,14 +1,14 @@
 <?php
 namespace forteroche\vendor\entity;
 
-class User
+class Member
 {
     protected $id;
     protected $privilege;
     protected $pseudo;
     protected $email;
     protected $pass;
-    protected $userName;
+    protected $memberName;
     protected $firstname;
     protected $inscriptionDate;
 
@@ -66,14 +66,14 @@ class User
         $this->pass = $pass;
     }
 
-    public function setUserName($userName)
+    public function setMemberName($memberName)
     {
-        if (!is_string($userName) || empty($userName))
+        if (!is_string($memberName) || empty($memberName))
         {
             throw new Exception('Nom non valide');
         }
 
-        $this->userName = $userName;
+        $this->memberName = $memberName;
     }
 
     public function setFirstname($firstname)
@@ -119,7 +119,7 @@ class User
 
     public function completeName()
     {
-        return $this->userName . ' ' . $this->firstname;
+        return $this->memberName . ' ' . $this->firstname;
     }
 
     public function inscriptionDate()

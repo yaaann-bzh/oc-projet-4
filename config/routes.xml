@@ -3,8 +3,16 @@
     <route url="/" module="posts" action="index" ></route>
     <route url="/index-([0-9]+)" module="posts" action="index" vars="index"></route>
     <route url="/post-([0-9]+)" module="posts" action="show" vars="id"></route>
+
     <route url="/comments-index-([0-9]+)" module="comments" action="index" vars="index"></route>
-    <route url="/user-([0-9]+)-([0-9]+)" module="comments" action="indexByUser" vars="user,index"></route>
+    <route url="/member-([0-9]+)-([0-9]+)" module="comments" action="indexByMember" vars="member,index"></route>
+    <route url="/insert-comment-([0-9]+)" module="comments" action="insert" vars="post"></route>
+
+    <route url="/connection" module="connexion" action="index" ></route>
+    <route url="/deconnection" module="connexion" action="disconnect" ></route>
+
+    <route url="/admin/" module="posts" action="index" ></route>
+
 
 
 </routes>
