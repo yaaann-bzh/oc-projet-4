@@ -48,7 +48,33 @@ class PostsController extends ApplicationComponent
             throw new \RuntimeException('L\'action "'.$this->action.'" n\'est pas définie sur ce module');
         }
 
+        /*if (empty($_SESSION)) {
+            $this->defineUser();
+        //}*/
+
         $this->$method($this->app->httpRequest());
+    }
+
+    public function defineUser() {  
+        $auth = $this->app->httpRequest()->cookieData('auth');
+        $userId = $this->app->httpRequest()->cookieData('userId');
+        $pseudo = $this->app->httpRequest()->cookieData('pseudo');
+        $member = $this->memberManager->getSingle($userId);
+
+        var_dump($auth);
+        var_dump($userId);
+        var_dump($pseudo);
+        var_dump($member);
+        var_dump($_COOKIE);
+
+        if ($auth === 'true' AND $userId !== null AND $pseudo !== null AND $member !== null) {
+            if ($pseudo === $member->pseudo()) {
+                $this->app->user()->setAuthenticated(true);
+                $this->app->user()->setAttribute('id', $userId);
+                $this->app->user()->setAttribute('pseudo', $pseudo);
+                $this->app->user()->setAttribute('privilege', $member->privilege());
+            }
+        }       
     }
 
     public function executeIndex(HTTPRequest $request)
@@ -97,7 +123,7 @@ class PostsController extends ApplicationComponent
 
         $this->page->setTabTitle('Accueil');
         $this->page->setActiveNav('home');
-
+        
         $this->page->setContent(__DIR__.'/view/index.php');
         $this->page->generate();
     }

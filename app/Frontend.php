@@ -7,6 +7,7 @@ use framework\HTTPResponse;
 use framework\Router;
 use framework\Route;
 use framework\User;
+use forteroche\vendor\model\MemberManager;
 
 class Frontend extends Application
 {
@@ -27,7 +28,7 @@ class Frontend extends Application
     {
         $controller = $this->getController();
         $controller->execute();
-
+      
         $this->httpResponse->setPage($controller->page());
         $this->httpResponse->send();
     }

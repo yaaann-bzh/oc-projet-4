@@ -62,12 +62,16 @@ class ConnexionController extends ApplicationComponent
                     $this->app->user()->setAttribute('pseudo', $member->pseudo());
                     $this->app->user()->setAttribute('privilege', $member->privilege());
 
-                    if ($request->postData('remember') !== null) {
-                        $this->app->httpResponse()->setcookie('auth', true, time() + 31*24*3600);
-                        $this->app->httpResponse()->setcookie('userId', $member->id(), time() + 31*24*3600);
-                    }
-                    
-                    $this->app->httpResponse()->redirect('.');
+                    /*if ($request->postData('remember') !== null) {
+                        $cookies = array(
+                            'auth' => 'true',
+                            'userId' => $member->id(),
+                            'pseudo' => $member->pseudo()
+                        );
+                        $this->page->addVars('cookies', $cookies);
+                    }*/
+
+                    $this->app->httpResponse()->redirect('/');
 
                 } else {
                     $this->page->addVars('invalid', true);
@@ -89,8 +93,9 @@ class ConnexionController extends ApplicationComponent
         session_destroy();
 
         // Suppression des cookies de connexion automatique
-        $this->app->httpResponse()->setcookie('auth', false);
+        $this->app->httpResponse()->setcookie('auth', '');
         $this->app->httpResponse()->setcookie('userId', '');
+        $this->app->httpResponse()->setcookie('pseudo', '');
 
         $this->app->httpResponse()->redirect('/');
 

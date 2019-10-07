@@ -40,11 +40,11 @@
                             <?php if ($user->isAuthenticated()) { ?>
                             <li class="nav-item active d-flex">
                                 <a class="nav-link" href="#" title="Mon profil"><i class="fas fa-member-alt"></i> <?= $user->getAttibute('pseudo'); ?></a>
-                                <a class="nav-link ml-3" href="/admin/disconnect" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
+                                <a class="nav-link ml-3" href="/deconnection" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
                             </li>
                             <?php } else { ?>
                                 <li class="nav-item <?php if ($activeNav === 'connect') { echo ' active'; } ?>">
-                                    <a class="nav-link" href="/admin/"><i class="fas fa-member-alt"></i> Se connecter</a>
+                                    <a class="nav-link" href="/connection"><i class="fas fa-member-alt"></i> Se connecter</a>
                                 </li>
                             <?php } ?>
 

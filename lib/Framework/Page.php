@@ -46,6 +46,15 @@ class Page extends ApplicationComponent
 
         extract($this->vars);
 
+        /*if (isset($cookies)) {
+            var_dump($cookies);
+            foreach ($cookies as $key => $cookie) {
+                var_dump($key);
+                var_dump($cookie);
+                $this->app->httpResponse()->setCookie($key, (string)$cookie, time() + 31*24*3600);
+            }
+        }*/
+
         ob_start();
         require $this->content;
         $content = ob_get_clean();
