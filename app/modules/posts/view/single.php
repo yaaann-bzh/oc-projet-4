@@ -40,6 +40,7 @@
                     </li>
                 </ul>
             </nav>
+
             <div class="border p-3">
                 <div class="d-flex justify-content-between align-items-center">
                     <h1 class="display-5"><?= $post->title(); ?></h1>
@@ -55,8 +56,13 @@
                 <hr class="my-4">
                 <p class="text-justify"><?= $post->content(); ?></p>
             </div>
+
             <div class="p-3" id="comments">
-                <?php
+                <?php 
+                if ($user->isAuthenticated()) {
+                    include('_commentForm.php');
+                }
+
                 foreach ($comments as $comment ) {
                 ?>
                 <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
