@@ -5,7 +5,7 @@ class Comment
 {
     protected $id;
     protected $postId;
-    protected $userId;
+    protected $memberId;
     protected $content;
     protected $addDate;
     protected $updateDate;
@@ -45,9 +45,9 @@ class Comment
         return $this->postId;
     }    
     
-    public function userId()
+    public function memberId()
     {
-        return $this->userId;
+        return $this->memberId;
     }    
     
     public function content()
@@ -67,14 +67,14 @@ class Comment
 
     // Setters //
     
-    public function setUserId()
+    public function setMemberId()
     {
-        if (!is_int($userId) || empty($userId))
+        if (!is_int($memberId) || empty($memberId))
         {
             throw new Exception('Identifiant auteur invalide');
         }
 
-        $this->userId = $userId;
+        $this->memberId = $memberId;
     }    
     
     public function setContent($content)
