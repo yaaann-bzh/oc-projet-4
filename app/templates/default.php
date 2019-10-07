@@ -39,7 +39,7 @@
                         <ul class="navbar-nav" id="member">
                             <?php if ($user->isAuthenticated()) { ?>
                             <li class="nav-item active d-flex">
-                                <a class="nav-link" href="#" title="Mon profil"><i class="fas fa-member-alt"></i> <?= $user->getAttibute('pseudo'); ?></a>
+                                <a class="nav-link" href="#" title="Mon profil"><i class="fas fa-member-alt"></i> <?= $user->getAttribute('pseudo'); ?></a>
                                 <a class="nav-link ml-3" href="/deconnection" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
                             </li>
                             <?php } else { ?>

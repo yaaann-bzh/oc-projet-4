@@ -67,21 +67,31 @@ class Comment
 
     // Setters //
     
-    public function setMemberId()
+    public function setMemberId($memberId)
     {
         if (!is_int($memberId) || empty($memberId))
         {
-            throw new Exception('Identifiant auteur invalide');
+            throw new \Exception('Identifiant auteur invalide');
         }
 
         $this->memberId = $memberId;
-    }    
+    }   
+    
+    public function setPostId($postId)
+    {
+        if (!is_int($postId) || empty($postId))
+        {
+            throw new \Exception('Article spécifié non valide');
+        }
+
+        $this->postId = $postId;
+    }
     
     public function setContent($content)
     {
         if (!is_string($content) || empty($content))
         {
-            throw new Exception('Contenu du post invalide');
+            throw new \Exception('Contenu du commentaire invalide');
         }
 
         $this->content = $content;

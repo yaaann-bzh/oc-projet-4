@@ -14,4 +14,20 @@ abstract class Manager
 
     public abstract function count();
 
+    public function exists($id)
+    {
+        $className = get_class($this);
+        $lastNsPos = strripos($className, '\\') + 1;
+        $table = lcfirst(substr($className, $lastNsPos, -7)) . 's';
+        $sql = 'SELECT COUNT(*) FROM ' . $table;
+
+        if ($this->dao->query($sql)->fetchColumn() > 0) {
+            return true ;
+        }
+        else {
+            return false ;
+        }
+
+    }
+
 }

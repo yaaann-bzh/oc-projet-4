@@ -3,7 +3,7 @@
         <div class="col-12 col-md-8">
             <div class="border p-3 mb-3">   
                 <div class="d-flex align-items-end">                
-                    <h1 class="h2 mb-0"><?= $member->pseudo(); ?></h1>
+                    <h1 class="h2 mb-0"><?= htmlspecialchars($member->pseudo(),ENT_QUOTES); ?></h1>
                     <p class="mb-1 ml-2 badge badge-success"><?php if ($member->privilege() !== null) { echo $member->privilege(); } ?></p>
                 </div>         
 
@@ -37,12 +37,12 @@
             foreach ($comments as $comment) {
                 ?>
                 <div class="border p-3 mb-3 bg-light">
-                    <p class="mb-1"><strong>Dans <a href="/post-<?= $comment->postId(); ?>#comment-<?= $comment->id(); ?>"><?= $posts[$comment->id()]; ?></a></strong></p>
+                    <p class="mb-1"><strong>Dans <a href="/post-<?= $comment->postId(); ?>#comment-<?= $comment->id(); ?>"><?= htmlspecialchars($posts[$comment->id()],ENT_QUOTES); ?></a></strong></p>
                     <p class="mb-2">
                         Le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
                         if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
                     </p>
-                    <p class="m-0"><?= $comment->content(); ?></p>
+                    <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES)); ?></p>
                 </div>
             <?php
             }

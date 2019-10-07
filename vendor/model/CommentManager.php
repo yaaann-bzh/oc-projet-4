@@ -65,4 +65,15 @@ class CommentManager extends \framework\Manager
         }
         return (int)$this->dao->query($sql)->fetchColumn();
     }
+
+    public function add($memberId, $postId, $content)
+    {
+        $q = $this->dao->prepare('INSERT INTO comments SET memberId = :memberId, postId = :postId, content = :content, addDate = NOW()');
+        
+        $q->bindValue(':memberId', $memberId);
+        $q->bindValue(':postId', $postId);
+        $q->bindValue(':content', $content);
+        
+        $q->execute();
+    }
 }

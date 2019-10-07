@@ -54,7 +54,7 @@
                     } ?>                  
                 </p>
                 <hr class="my-4">
-                <p class="text-justify"><?= $post->content(); ?></p>
+                <p class="text-justify"><?= nl2br(htmlspecialchars($post->content(),ENT_QUOTES)); ?></p>
             </div>
 
             <div class="p-3" id="comments">
@@ -67,12 +67,12 @@
                 ?>
                 <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
                     <p>
-                        <strong><a href="/member-<?= $comment->memberId(); ?>-1"><?= $members[$comment->id()]->pseudo(); ?></a></strong>
+                        <strong><a href="/member-<?= $comment->memberId(); ?>-1"><?= htmlspecialchars($members[$comment->id()]->pseudo(),ENT_QUOTES); ?></a></strong>
                         <span class="mb-1 ml-2 badge badge-success"><?php if ($members[$comment->id()]->privilege() !== null) { echo $members[$comment->id()]->privilege(); } ?></span>
                          - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
                         if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
                     </p>
-                    <p class="m-0"><?= $comment->content(); ?></p>
+                    <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES)); ?></p>
                 </div>
                 <?php
                 }

@@ -5,7 +5,7 @@ session_start();
 
 class User
 {
-    public function getAttibute($attr)
+    public function getAttribute($attr)
     {
         return isset($_SESSION[$attr]) ? $_SESSION[$attr] : null;
     }

@@ -10,6 +10,7 @@ use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
 use forteroche\vendor\model\MemberManager;
+use forteroche\vendor\entity\Comment;
 
 class CommentsController extends ApplicationComponent 
 {
@@ -100,58 +101,94 @@ class CommentsController extends ApplicationComponent
 
         $this->page->setContent(__DIR__.'/view/index.php');
         $this->page->generate();
+    }
+
+    public function executeIndexByMember(HTTPRequest $request)
+    {
+        $nbComments = 10;
+        $memberId = (int)$request->getData('member');
+        $index = (int)$request->getData('index');
+
+        $member = $this->memberManager->getSingle($memberId);
+        if (empty($member)) {
+            $this->app->httpResponse()->redirect404();
+        }
+        $this->page->addVars('member', $member);
+
+        $nbPages = (int)ceil($this->commentManager->count('memberId', $member->Id()) / $nbComments);//Arrondi au nombre entier supérieur
+        $this->page->addVars('nbPages', $nbPages);
+    
+        if ($index === 1) {
+            $prevIndex = '#';
+            $nextIndex = 'member-' . $member->Id() . '-' . ($index + 1);
+            $begin = 0;
+        } else {
+            if ($index === $nbPages) {
+                $prevIndex = 'member-' . $member->Id() . '-' . ($index - 1);
+                $nextIndex = '#';
+            } else {
+                $prevIndex = 'member-' . $member->Id() . '-' . ($index - 1);
+                $nextIndex = 'member-' . $member->Id() . '-' . ($index + 1);
+            }
+            $begin = ($index - 1) * $nbComments;
+        } 
+        $this->page->addVars('index', $index);  
+        $this->page->addVars('prevIndex', $prevIndex);
+        $this->page->addVars('nextIndex', $nextIndex);
+
+        $comments = $this->commentManager->getList($begin, $nbComments, $member->id());
+        if ($index !== 1 AND empty($comments)) {
+            $this->app->httpResponse()->redirect404();
         }
 
-        public function executeIndexByMember(HTTPRequest $request)
-        {
-            $nbComments = 10;
-            $memberId = (int)$request->getData('member');
-            $index = (int)$request->getData('index');
+        $posts = [];
+        foreach ($comments as $comment) {
+            $post = $this->postManager->getSingle($comment->postId());
+            $posts[$comment->id()] = $post->title();
+        }
 
-            $member = $this->memberManager->getSingle($memberId);
-            if (empty($member)) {
-                $this->app->httpResponse()->redirect404();
-            }
-            $this->page->addVars('member', $member);
+        $this->page->addVars('comments', $comments);
+        $this->page->addVars('posts', $posts);
 
-            $nbPages = (int)ceil($this->commentManager->count('memberId', $member->Id()) / $nbComments);//Arrondi au nombre entier supérieur
-            $this->page->addVars('nbPages', $nbPages);
-        
-            if ($index === 1) {
-                $prevIndex = '#';
-                $nextIndex = 'member-' . $member->Id() . '-' . ($index + 1);
-                $begin = 0;
-            } else {
-                if ($index === $nbPages) {
-                    $prevIndex = 'member-' . $member->Id() . '-' . ($index - 1);
-                    $nextIndex = '#';
-                } else {
-                    $prevIndex = 'member-' . $member->Id() . '-' . ($index - 1);
-                    $nextIndex = 'member-' . $member->Id() . '-' . ($index + 1);
+        $this->page->setTabTitle('Derniers commentaires');
+
+        $this->page->setContent(__DIR__.'/view/member.php');
+        $this->page->generate();
+    }
+
+    public function executeInsert(HTTPRequest $request)
+    {
+        if ($this->app()->user()->isAuthenticated() AND $request->postExists('comment')) {
+            $memberId = (int)$this->app->user()->getAttribute('id');
+            $postId = (int)$request->getData('post');
+            $content = $request->postData('comment');
+
+            try {
+                if ($this->memberManager->exists($memberId) AND $this->postManager->exists($postId)) {
+                    $comment = new Comment([
+                        'memberId' => $memberId,
+                        'postId' => $postId,
+                        'content' => $content
+                    ]);
+
+                    $this->commentManager->add($memberId, $postId, $content);
                 }
-                $begin = ($index - 1) * $nbComments;
-            } 
-            $this->page->addVars('index', $index);  
-            $this->page->addVars('prevIndex', $prevIndex);
-            $this->page->addVars('nextIndex', $nextIndex);
-    
-            $comments = $this->commentManager->getList($begin, $nbComments, $member->id());
-            if ($index !== 1 AND empty($comments)) {
-                $this->app->httpResponse()->redirect404();
+
+                $this->app->httpResponse()->redirect('/post-' . $postId . '#comments');
+
+            } catch (\Exception $e) {
+                $intro = 'Erreur lors de l\'ajout du commentaire';
+                $message = $e->getMessage();
             }
+            
+            $this->page->addVars('intro', $intro);
+            $this->page->addVars('message', $message);
     
-            $posts = [];
-            foreach ($comments as $comment) {
-                $post = $this->postManager->getSingle($comment->postId());
-                $posts[$comment->id()] = $post->title();
-            }
+            $this->page->setTabTitle('Erreur');
     
-            $this->page->addVars('comments', $comments);
-            $this->page->addVars('posts', $posts);
-    
-            $this->page->setTabTitle('Derniers commentaires');
-    
-            $this->page->setContent(__DIR__.'/view/member.php');
+            $this->page->setContent(__DIR__.'/../../../Errors/modelError.php');
             $this->page->generate();
-            }
+            
+        }
+    }
 }
