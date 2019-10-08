@@ -50,6 +50,6 @@ class MemberManager extends \framework\Manager
         }
 
         $sql = 'SELECT id FROM members WHERE ' . $key . '="' . $var . '"';
-        return (int)$this->dao->query($sql)->fetch();
+        return $this->dao->query($sql)->fetchColumn();
     }
 }

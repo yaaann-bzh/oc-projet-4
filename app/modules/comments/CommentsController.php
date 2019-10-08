@@ -10,6 +10,7 @@ use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
 use forteroche\vendor\model\MemberManager;
+use forteroche\vendor\model\ReportManager;
 use forteroche\vendor\entity\Comment;
 
 class CommentsController extends ApplicationComponent 
@@ -21,6 +22,7 @@ class CommentsController extends ApplicationComponent
     protected $postManager = null;
     protected $commentManager = null;
     protected $memberManager = null;
+    protected $reportManager = null;
 
     public function __construct(Application $app, $module, $action)
     {
@@ -29,6 +31,7 @@ class CommentsController extends ApplicationComponent
         $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
         $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
         $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion());
+        $this->reportManager = new ReportManager(PDOFactory::getMysqlConnexion());
         $this->page = new Page($app);
         $this->module = $module;
         $this->action = $action;
@@ -190,5 +193,38 @@ class CommentsController extends ApplicationComponent
             $this->page->generate();
             
         }
+    }
+
+    public function executeReport(HTTPRequest $request)
+    {
+        $commentId = (int)$request->getData('comment');
+        $comment = $this->commentManager->getSingle($commentId);
+        if (empty($comment)) {
+            $this->app->httpResponse()->redirect404();
+        }
+        $member = $this->memberManager->getSingle($comment->memberId());
+        $post = $this->postManager->getSingle($comment->postId());
+        $userId = (int)$this->app->user()->getAttribute('id');
+
+        if ($request->postExists('motif')) {
+            $content = $request->postData('motif') . ' - ' . $request->postData('content');
+            $this->reportManager->add($userId, $commentId, $content);
+        }
+
+        $reportId = (int)$this->reportManager->getId($commentId, $userId);
+
+        if ($reportId !== null) {
+            $report = $this->reportManager->getSingle($reportId);
+            $this->page->addVars('report', $report);
+        }
+
+        $this->page->addVars('comment', $comment);
+        $this->page->addVars('member', $member);
+        $this->page->addVars('post', $post);
+
+        $this->page->setTabTitle('Signalement');
+    
+        $this->page->setContent(__DIR__.'/view/report.php');
+        $this->page->generate();
     }
 }

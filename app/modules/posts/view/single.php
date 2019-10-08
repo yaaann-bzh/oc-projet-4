@@ -73,6 +73,8 @@
                         if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
                     </p>
                     <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
+
+                    <?php include(__DIR__ . '/../../../templates/_comment_admin.php'); ?>
                 </div>
                 <?php
                 }

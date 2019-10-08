@@ -56,6 +56,26 @@ class CommentManager extends \framework\Manager
         return $comments;
     }
 
+    public function getSingle($id)
+    {
+        $req = $this->dao->prepare('SELECT * FROM comments WHERE id = :id');
+        $req->bindValue(':id', (int) $id, \PDO::PARAM_INT);
+        $req->execute();
+        
+        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'forteroche\vendor\entity\Comment');
+        
+        if ($comment = $req->fetch())
+        {
+            $comment->setAddDate(new \DateTime($comment->addDate()));
+            if ($comment->updateDate() != null) {
+                $comment->setUpdateDate(new \DateTime($comment->updateDate()));
+            }
+            return $comment;
+        }
+        
+        return null;  
+    }
+
     public function count($key = null, $id = null)
     {
         $sql = 'SELECT COUNT(*) FROM comments';
