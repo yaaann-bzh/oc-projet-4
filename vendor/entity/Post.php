@@ -36,11 +36,11 @@ class Post
     public function getExerpt()
     {
         $exerptLength = 200;
-        $textContent = nl2br($this->content);
+        $textContent = nl2br(htmlspecialchars($this->content), ENT_QUOTES | ENT_SUBSTITUTE);
         $fisrtBrPos = strpos($textContent, '<br />');
 
         if ($fisrtBrPos <= 200) {
-            return substr($textContent, 0, $fisrtBrPos);
+            $exerptLength = $fisrtBrPos;
         }
         return substr($textContent, 0, $exerptLength);
     }

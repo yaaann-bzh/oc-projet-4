@@ -38,7 +38,7 @@
                 ?>
                 <div class="border p-3">
                     <div class="d-flex justify-content-between">
-                        <h2><a href="post-<?= $post->id(); ?>"><?= $post->id(); ?> - <?= htmlspecialchars($post->title(),ENT_QUOTES); ?></a></h2>
+                        <h2><a href="post-<?= $post->id(); ?>"><?= $post->id(); ?> - <?= htmlspecialchars($post->title(),ENT_QUOTES | ENT_SUBSTITUTE); ?></a></h2>
                         <span>
                             <a href="post-<?= $post->id(); ?>#comments" title="Commentaires" class="badge badge-primary badge-pill"><?= $nbComments[$post->id()]; ?></a>
                             <button class="collapsed btn btn-light ml-2" type="button" data-toggle="collapse" data-target="#postContent-<?= $post->id(); ?>" aria-controls="postContent-<?= $post->id(); ?>" aria-expanded="false" aria-label="Toggle">
@@ -48,7 +48,7 @@
 
                     </div>
                     <div class="collapse" id="postContent-<?= $post->id(); ?>" style="">
-                        <p><?= htmlspecialchars($post->getExerpt(),ENT_QUOTES); ?> ... | <a href="post-<?= $post->id(); ?>">Lire la suite</a></p>
+                        <p><?= htmlspecialchars($post->getExerpt(),ENT_QUOTES | ENT_SUBSTITUTE); ?> ... | <a href="post-<?= $post->id(); ?>">Lire la suite</a></p>
                     </div>
                 </div>              
                 <?php
