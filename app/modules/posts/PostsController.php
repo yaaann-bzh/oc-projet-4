@@ -9,6 +9,7 @@ use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
+use forteroche\vendor\model\UserManager;
 
 class PostsController extends ApplicationComponent
 {
@@ -18,6 +19,7 @@ class PostsController extends ApplicationComponent
     protected $view = '';
     protected $postManager = null;
     protected $commentManager = null;
+    protected $userManager = null;
 
     public function __construct(Application $app, $module, $action)
     {
@@ -25,6 +27,7 @@ class PostsController extends ApplicationComponent
 
         $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
         $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
+        $this->userManager = new UserManager(PDOFactory::getMysqlConnexion());
         $this->page = new Page;
         $this->module = $module;
         $this->action = $action;
@@ -88,7 +91,7 @@ class PostsController extends ApplicationComponent
 
         $nbComments = [];
         foreach ($postsList as $post) {  
-            $nbComments[$post->id()] = $this->commentManager->count($post->id());
+            $nbComments[$post->id()] = $this->commentManager->count('postId', $post->id());
         }
         $this->page->addVars('nbComments', $nbComments);
 
@@ -107,6 +110,12 @@ class PostsController extends ApplicationComponent
             $this->app->httpResponse()->redirect404();
         }
         $comments = $this->commentManager->getByPost($id);
+        
+        $users = [];
+        foreach ($comments as $comment ) {
+            $users[$comment->id()] = $this->userManager->getSingle($comment->userId());
+        }
+
         $nbPosts = $this->postManager->count();
         $nbTab = 4;
         $dotBefore = false;
@@ -145,6 +154,7 @@ class PostsController extends ApplicationComponent
 
         $this->page->addVars('post', $post);
         $this->page->addVars('comments', $comments);
+        $this->page->addVars('users', $users);
 
         $this->page->addVars('prevPost', $prevPost);
         $this->page->addVars('nextPost', $nextPost);

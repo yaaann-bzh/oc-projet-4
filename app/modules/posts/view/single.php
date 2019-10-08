@@ -1,4 +1,4 @@
-<section class="container">
+<section class="container pt-5">
     <div class="row">
         <div class="col-12 col-md-8">
             <nav class="m-3">
@@ -40,8 +40,12 @@
                     </li>
                 </ul>
             </nav>
+
             <div class="border p-3">
-                <h1 class="display-5"><?= $post->title(); ?></h1>
+                <div class="d-flex justify-content-between align-items-center">
+                    <h1 class="display-5"><?= $post->title(); ?></h1>
+                    <p><a href="#comments">Commentaires <i class="fas fa-long-arrow-alt-down"></i></a></p>
+                </div>
                 <p> 
                     <em>Publié le <?= $post->addDate()->format('d/m/Y à H\hi'); ?></em>
                     <?php
@@ -52,8 +56,13 @@
                 <hr class="my-4">
                 <p class="text-justify"><?= nl2br(htmlspecialchars($post->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
             </div>
-            <div class="p-3">
-                <?php
+
+            <div class="p-3" id="comments">
+                <?php 
+                if ($user->isAuthenticated()) {
+                    include('_commentForm.php');
+                }
+
                 foreach ($comments as $comment ) {
                 ?>
                 <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
