@@ -27,21 +27,37 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
-                <div class="collapse navbar-collapse" id="navbarsExample07" style="">
-                    <ul class="navbar-nav mr-auto">
-                        <!--Prévoir le changement de classe des liens pour activation (si besoin)-->
-                        <li class="nav-item <?php if ($activeNav === 'home') { echo ' active'; } ?>">
-                            <a class="nav-link" href="/"><i class="fas fa-home"></i> Home <span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="nav-item <?php if ($activeNav === 'comments') { echo ' active'; } ?>">
-                            <a class="nav-link" href="/comments-index-1"><i class="far fa-comment-dots"></i> Derniers commentaires</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav" id="user">
-                        <li class="nav-item <?php if ($activeNav === 'connect') { echo ' active'; } ?>">
-                            <a class="nav-link" href="#"><i class="fas fa-user-alt"></i> Se connecter</a>
-                        </li>
-                    </ul>
+                    <div class="collapse navbar-collapse" id="navbarsExample07" style="">
+                        <ul class="navbar-nav mr-auto">
+                            <li class="nav-item <?php if ($activeNav === 'home') { echo ' active'; } ?>">
+                                <a class="nav-link" href="/"><i class="fas fa-home"></i> Home</a>
+                            </li>
+                            <li class="nav-item <?php if ($activeNav === 'comments') { echo ' active'; } ?>">
+                                <a class="nav-link" href="/comments-index-1"><i class="far fa-comment-dots"></i> Derniers commentaires</a>
+                            </li>
+                        <?php if ($user->isAdmin()) { ?>
+                            <li class="nav-item <?php if ($activeNav === 'reports') { echo ' active'; } ?>">
+                                <a class="nav-link" href="/admin/reports-index-1"><i class="fas fa-exclamation"></i> Signalements</a>
+                            </li>
+                            <li class="nav-item <?php if ($activeNav === 'redaction') { echo ' active'; } ?>">
+                                <a class="nav-link" href="/admin/redaction"><i class="fas fa-feather-alt"></i> Redaction</a>
+                            </li>
+                        <?php } ?>
+                        </ul>
+                        <ul class="navbar-nav" id="member">
+                            <?php if ($user->isAuthenticated()) { ?>
+                            <li class="nav-item active d-flex">
+                                <a class="nav-link" href="#" title="Mon profil"><i class="fas fa-member-alt"></i> <?= $user->getAttribute('pseudo'); ?></a>
+                                <a class="nav-link ml-3" href="/deconnection" title="Se deconnecter"><i class="fas fa-power-off"></i></a>
+                            </li>
+                            <?php } else { ?>
+                                <li class="nav-item <?php if ($activeNav === 'connect') { echo ' active'; } ?>">
+                                    <a class="nav-link" href="/connection"><i class="fas fa-member-alt"></i> Se connecter</a>
+                                </li>
+                            <?php } ?>
+
+                        </ul>
+                    </div>
                 </div>
             </div>
 
