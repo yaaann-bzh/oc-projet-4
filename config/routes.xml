@@ -15,6 +15,7 @@
     <route url="/user/comment-([0-9]+)-?(updated)?" module="comments" action="show" vars="comment,updated"></route>
 
     <route url="/admin/" module="posts" action="index" ></route>
-    <route url="/admin/comment-([0-9]+)" module="comments" action="show" vars="comment"></route>
+    <route url="/admin/redaction" module="posts" action="redaction"></route>
+
 
 </routes>

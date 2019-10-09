@@ -22,7 +22,7 @@
         <header class="site-header sticky-top">
             <nav class="navbar navbar-expand-md navbar-dark bg-dark">
                 <div class="container">
-                    <a class="navbar-brand" href="/">J. Forteroche</a>
+                    <!--<a class="navbar-brand" href="/">J. Forteroche</a>-->
                     <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarsExample07" aria-controls="navbarsExample07" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

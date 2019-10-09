@@ -103,7 +103,7 @@ class PostsController extends ApplicationComponent
                 $nextIndex = 'index-' . ($index + 1);
             }
             $begin = ($index - 1) * $nbPosts;
-        } 
+        }
 
         $this->page->addVars('index', $index);  
         $this->page->addVars('prevIndex', $prevIndex);
@@ -194,5 +194,24 @@ class PostsController extends ApplicationComponent
 
         $this->page->setContent(__DIR__.'/view/single.php');
         $this->page->generate();
+    }
+
+    public function executeRedaction(HTTPRequest $request)
+    {
+        if ($this->app()->user()->isAdmin() AND $request->postExists('title') AND $request->postExists('content')) {
+            $memberId = (int)$this->app->user()->getAttribute('id');
+            $title = (int)$request->getData('title');
+            $content = $request->postData('content');
+            var_dump($memberId);
+            var_dump($title);
+            var_dump($content);
+        }
+
+        $this->page->setTabTitle('Redaction');
+        $this->page->setActiveNav('redaction');
+
+        $this->page->setContent(__DIR__.'/view/redaction.php');
+        $this->page->generate();
+        
     }
 }
