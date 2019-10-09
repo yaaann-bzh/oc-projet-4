@@ -4,7 +4,7 @@ namespace forteroche\vendor\model;
 class ReportManager extends \framework\Manager 
 {
 
-    public function getList($id = null, $debut, $fin){
+    public function getList($debut, $fin, $filters = []){
         
     }
 

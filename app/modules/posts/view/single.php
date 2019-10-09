@@ -63,22 +63,25 @@
                     include('_commentForm.php');
                 }
 
-                foreach ($comments as $comment ) {
-                ?>
-                <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
-                    <p>
-                        <strong><a href="/member-<?= $comment->memberId(); ?>-1"><?= htmlspecialchars($members[$comment->id()]->pseudo(),ENT_QUOTES | ENT_SUBSTITUTE); ?></a></strong>
-                        <span class="mb-1 ml-2 badge badge-success"><?php if ($members[$comment->id()]->privilege() !== null) { echo $members[$comment->id()]->privilege(); } ?></span>
-                         - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
-                        if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
-                    </p>
-                    <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
+                foreach ($comments as $comment ) { ?>
+                    <div class="p-3 mb-3 bg-light border border-dark rounded" id="comment-<?= $comment->id(); ?>">
+                        <?php
+                        if ((int)$comment->removed() === 1) { ?>
+                            <p class="ml-3"><em>Ce commentaire a été supprimé [...]</em></p>
+                        <?php 
+                        } else { ?>
+                            <p>
+                                <strong><a href="/member-<?= $comment->memberId(); ?>-1"><?= htmlspecialchars($members[$comment->id()]->pseudo(),ENT_QUOTES | ENT_SUBSTITUTE); ?></a></strong>
+                                <span class="mb-1 ml-2 badge badge-success"><?php if ($members[$comment->id()]->privilege() !== null) { echo $members[$comment->id()]->privilege(); } ?></span>
+                                - le <?= $comment->addDate()->format('d/m/Y à H\hi'); 
+                                if ($comment->updateDate() !== null) { echo '<em> - Modifié le ' . $comment->updateDate()->format('d/m/Y à H\hi') . '.</em>'; } ?>                  
+                            </p>
+                            <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
 
-                    <?php include(__DIR__ . '/../../../templates/_comment_admin.php'); ?>
-                </div>
-                <?php
-                }
-                ?>         
+                            <?php include(__DIR__ . '/../../../templates/_comment_admin.php'); ?>
+                    <?php } ?>
+                    </div>
+                <?php } ?>
             </div>
         </div>
     </div>

@@ -25,12 +25,16 @@ class CommentManager extends \framework\Manager
         return $comments;
     }
 
-    public function getList($debut, $limit, $memberId = null)
+    public function getList($debut, $limit, $filters=[])
     {
         $sql = 'SELECT * FROM comments';
 
-        if ($memberId !== null) {
-            $sql .= ' WHERE memberId=' . $memberId;
+        if (!empty($filters)) {
+            $sql .= ' WHERE ';
+            foreach ($filters as $key => $filter) {
+                $sql .= $key . '=' . $filter . ' AND ';
+            }
+            $sql = substr($sql, 0, -5);
         }
 
         $sql .= ' ORDER BY addDate DESC';
@@ -76,12 +80,16 @@ class CommentManager extends \framework\Manager
         return null;  
     }
 
-    public function count($key = null, $id = null)
+    public function count($filters=[])
     {
         $sql = 'SELECT COUNT(*) FROM comments';
 
-        if ($key !== null AND $id !== null) {
-            $sql .= ' WHERE ' . $key . '=' . (int)$id;
+        if (!empty($filters)) {
+            $sql .= ' WHERE ';
+            foreach ($filters as $key => $filter) {
+                $sql .= $key . '=' . $filter . ' AND ';
+            }
+            $sql = substr($sql, 0, -5);
         }
         return (int)$this->dao->query($sql)->fetchColumn();
     }
@@ -109,6 +117,10 @@ class CommentManager extends \framework\Manager
 
     public function delete($id)
     {
-        # code...
+        $q = $this->dao->prepare('UPDATE comments SET removed = 1, updateDate = NOW() WHERE id = :id');
+        
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
     }
 }

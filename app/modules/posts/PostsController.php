@@ -116,8 +116,9 @@ class PostsController extends ApplicationComponent
         $this->page->addVars('postsList', $postsList);
 
         $nbComments = [];
-        foreach ($postsList as $post) {  
-            $nbComments[$post->id()] = $this->commentManager->count('postId', $post->id());
+        foreach ($postsList as $post) {
+            $filters['postId'] = $post->id();
+            $nbComments[$post->id()] = $this->commentManager->count($filters);
         }
         $this->page->addVars('nbComments', $nbComments);
 

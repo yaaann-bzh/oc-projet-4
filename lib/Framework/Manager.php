@@ -10,7 +10,7 @@ abstract class Manager
         $this->dao = $dao;
     }
 
-    public abstract function getList($id = null, $debut, $fin);
+    public abstract function getList($debut, $limit, $filters = []);
 
     public abstract function count();
 

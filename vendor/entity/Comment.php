@@ -4,6 +4,7 @@ namespace forteroche\vendor\entity;
 class Comment 
 {
     protected $id;
+    protected $removed;
     protected $postId;
     protected $memberId;
     protected $content;
@@ -38,6 +39,11 @@ class Comment
     public function id()
     {
         return $this->id;
+    }
+
+    public function removed()
+    {
+        return $this->removed;
     }
     
     public function postId()

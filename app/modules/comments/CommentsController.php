@@ -69,7 +69,9 @@ class CommentsController extends ApplicationComponent
     public function executeIndex(HTTPRequest $request)
     {
         $nbComments = 10;
-        $nbPages = (int)ceil($this->commentManager->count() / $nbComments);//Arrondi au nombre entier supérieur
+        $filters['removed'] = 0;
+
+        $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 
         $index = (int)$request->getData('index');
@@ -93,7 +95,7 @@ class CommentsController extends ApplicationComponent
         $this->page->addVars('prevIndex', $prevIndex);
         $this->page->addVars('nextIndex', $nextIndex);
 
-        $comments = $this->commentManager->getList($begin, $nbComments);
+        $comments = $this->commentManager->getList($begin, $nbComments, $filters);
         if ($index !== 1 AND empty($comments)) {
             $this->app->httpResponse()->redirect404();
         }
@@ -129,7 +131,10 @@ class CommentsController extends ApplicationComponent
         }
         $this->page->addVars('member', $member);
 
-        $nbPages = (int)ceil($this->commentManager->count('memberId', $member->Id()) / $nbComments);//Arrondi au nombre entier supérieur
+        $filters['memberId'] = $member->id();
+        $filters['removed'] = 0;
+
+        $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
     
         if ($index === 1) {
@@ -150,7 +155,7 @@ class CommentsController extends ApplicationComponent
         $this->page->addVars('prevIndex', $prevIndex);
         $this->page->addVars('nextIndex', $nextIndex);
 
-        $comments = $this->commentManager->getList($begin, $nbComments, $member->id());
+        $comments = $this->commentManager->getList($begin, $nbComments, $filters);
         if ($index !== 1 AND empty($comments)) {
             $this->app->httpResponse()->redirect404();
         }

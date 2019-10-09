@@ -18,6 +18,17 @@
 	margin: 0;
 }
 
+.removed-message{
+	padding: 20px;
+	border-radius: 15px;
+	border: black 2px solid;
+	background-color: rgb(200, 200, 200);
+}
+
+.removed-message p{
+	margin: 0;
+}
+
 
 /* FORMULAIRE DE CONNECTION - Debut --------------------------------------------------------------------------------------*/
 #connectincorrect{
