@@ -10,6 +10,8 @@ use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
 use forteroche\vendor\model\MemberManager;
+use forteroche\vendor\entity\Post;
+
 
 class PostsController extends ApplicationComponent
 {
@@ -199,12 +201,24 @@ class PostsController extends ApplicationComponent
     public function executeRedaction(HTTPRequest $request)
     {
         if ($this->app()->user()->isAdmin() AND $request->postExists('title') AND $request->postExists('content')) {
-            $memberId = (int)$this->app->user()->getAttribute('id');
-            $title = (int)$request->getData('title');
+            $authorId = (int)$this->app->user()->getAttribute('id');
+            $title = $request->postData('title');
             $content = $request->postData('content');
-            var_dump($memberId);
-            var_dump($title);
-            var_dump($content);
+
+            try {
+                $post = new Post([
+                    'authorId' => $authorId,
+                    'title' => $title,
+                    'content' => $content
+                ]);
+
+                $this->postManager->add($post);
+                $this->app->httpResponse()->redirect('/post-' . $post->id());
+                
+            } catch (\Exception $e) {
+                $message = $e->getMessage();
+                $this->page->addVars('message', $message);
+            }
         }
 
         $this->page->setTabTitle('Redaction');

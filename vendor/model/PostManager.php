@@ -1,6 +1,8 @@
 <?php
 namespace forteroche\vendor\model;
 
+use forteroche\vendor\entity\Post;
+
 class PostManager extends \framework\Manager 
 {
     public function getList($debut, $limit, $filters = []) {
@@ -53,12 +55,15 @@ class PostManager extends \framework\Manager
 
     public function add(Post $post)
     {
-        $req = $this->dao->prepare('INSERT INTO posts(authorId, title, content, addDate) VALUES(:authorId, :title, :content, NOW()) ');
-        $req->execute(array(
-            'authorId' => $post->getAuthorId(),
-            'title' => $post->getTitle(),
-            'content' => $post->getContent()
-        ));
+        $req = $this->dao->prepare('INSERT INTO posts SET authorId = :authorId, title = :title, content = :content, addDate = NOW()');
+        
+        $req->bindValue(':authorId', $post->authorId(), \PDO::PARAM_INT);
+        $req->bindValue(':title', $post->title());
+        $req->bindValue(':content', $post->content());
+        
+        $req->execute();
+
+        $post->setId((int)$this->dao->lastInsertId());
     }
 
 }

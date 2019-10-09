@@ -17,7 +17,7 @@ class User
 
     public function isAdmin()
     {
-        return isset($_SESSION['privilege']) OR $_SESSION['privilege'] !== null;
+        return isset($_SESSION['privilege']) && $_SESSION['privilege'] !== null;
     }
     
     public function setAuthenticated($authenticated = true)

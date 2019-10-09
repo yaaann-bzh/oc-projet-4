@@ -47,31 +47,41 @@ class Post
 
     // SETTERS //
 
+    public function setId($id)
+    {
+        if (!is_int($id) || empty($id))
+        {
+            throw new \Exception('Identifiant de publication invalide');
+        }
+
+        $this->id = $id;
+    }
+
     public function setAuthorId($authorId)
     {
         if (!is_int($authorId) || empty($authorId))
         {
-            throw new Exception('Identifiant auteur invalide');
+            throw new \Exception('Identifiant auteur invalide');
         }
 
         $this->authorId = $authorId;
     }
 
-    public function setTilte($tilte)
+    public function setTitle($title)
     {
-        if (!is_string($tilte) || empty($tilte))
+        if (!is_string($title) || empty($title))
         {
-            throw new Exception('Titre du post invalide');
+            throw new \Exception('Titre du post invalide');
         }
 
-        $this->tilte = $tilte;
+        $this->title = $title;
     }
 
     public function setContent($content)
     {
         if (!is_string($content) || empty($content))
         {
-            throw new Exception('Contenu du post invalide');
+            throw new \Exception('Contenu du post invalide');
         }
 
         $this->content = $content;
