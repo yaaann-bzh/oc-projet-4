@@ -4,8 +4,9 @@ namespace forteroche\vendor\entity;
 class Comment 
 {
     protected $id;
+    protected $removed;
     protected $postId;
-    protected $userId;
+    protected $memberId;
     protected $content;
     protected $addDate;
     protected $updateDate;
@@ -39,15 +40,20 @@ class Comment
     {
         return $this->id;
     }
+
+    public function removed()
+    {
+        return $this->removed;
+    }
     
     public function postId()
     {
         return $this->postId;
     }    
     
-    public function userId()
+    public function memberId()
     {
-        return $this->userId;
+        return $this->memberId;
     }    
     
     public function content()
@@ -67,21 +73,31 @@ class Comment
 
     // Setters //
     
-    public function setUserId()
+    public function setMemberId($memberId)
     {
-        if (!is_int($userId) || empty($userId))
+        if (!is_int($memberId) || empty($memberId))
         {
-            throw new Exception('Identifiant auteur invalide');
+            throw new \Exception('Identifiant auteur invalide');
         }
 
-        $this->userId = $userId;
-    }    
+        $this->memberId = $memberId;
+    }   
+    
+    public function setPostId($postId)
+    {
+        if (!is_int($postId) || empty($postId))
+        {
+            throw new \Exception('Article spécifié non valide');
+        }
+
+        $this->postId = $postId;
+    }
     
     public function setContent($content)
     {
         if (!is_string($content) || empty($content))
         {
-            throw new Exception('Contenu du post invalide');
+            throw new \Exception('Contenu du commentaire invalide');
         }
 
         $this->content = $content;

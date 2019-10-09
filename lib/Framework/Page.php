@@ -1,7 +1,7 @@
 <?php
 namespace framework;
 
-class Page
+class Page extends ApplicationComponent
 {
     protected $tabTitle;
     protected $activeNav;
@@ -41,7 +41,19 @@ class Page
         {
             throw new \RuntimeException('La vue spécifiée n\'existe pas');
         }
+
+        $user = $this->app->user();
+
         extract($this->vars);
+
+        /*if (isset($cookies)) {
+            var_dump($cookies);
+            foreach ($cookies as $key => $cookie) {
+                var_dump($key);
+                var_dump($cookie);
+                $this->app->httpResponse()->setCookie($key, (string)$cookie, time() + 31*24*3600);
+            }
+        }*/
 
         ob_start();
         require $this->content;

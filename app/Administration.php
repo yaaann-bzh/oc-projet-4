@@ -8,7 +8,7 @@ use framework\Router;
 use framework\Route;
 use framework\User;
 
-class Frontend extends Application
+class Administration extends Application 
 {
     protected $httpRequest;
     protected $httpResponse;
@@ -19,15 +19,27 @@ class Frontend extends Application
     {
         $this->httpRequest = new HTTPRequest($this);
         $this->httpResponse = new HTTPResponse($this);
-        $this->name = 'Frontend';
+        $this->name = 'Administration';
         $this->user = new User();
     }
 
     public function run()
     {
-        $controller = $this->getController();
+        if ($this->user->isAuthenticated())
+        {
+            if ($this->user->isAdmin()) {
+                $controller = $this->getController();
+            } else {
+                $this->httpResponse->redirect403();
+            }
+        }
+        else
+        {
+            $controller = new modules\connexion\ConnexionController($this, 'connexion', 'index');
+        }
+
         $controller->execute();
-      
+
         $this->httpResponse->setPage($controller->page());
         $this->httpResponse->send();
     }

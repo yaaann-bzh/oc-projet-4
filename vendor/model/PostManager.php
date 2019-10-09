@@ -3,7 +3,7 @@ namespace forteroche\vendor\model;
 
 class PostManager extends \framework\Manager 
 {
-    public function getList($debut, $limit, $id = null) {
+    public function getList($debut, $limit, $filters = []) {
         $sql = 'SELECT * FROM posts ORDER BY id DESC';
 
         if (isset($debut) && isset($limit)) {

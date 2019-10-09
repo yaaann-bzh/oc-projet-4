@@ -1,7 +1,7 @@
 <section class="container pt-5">
     <div class="row">
         <div class="col-12 col-md-8">
-            <h1 class="display-5">Derniers commentaires</h1>
+            <h1 class="h2">Derniers commentaires</h1>
             <nav>
                 <ul class="pagination justify-content-center">
                     <li class="page-item">
@@ -38,6 +38,9 @@
                     </p>
                     <p class="mb-2"><em>dans <a href="/post-<?= $comment->postId(); ?>#comment-<?= $comment->id(); ?>"><?= htmlspecialchars($posts[$comment->id()],ENT_QUOTES | ENT_SUBSTITUTE); ?></a></em></p>
                     <p class="m-0"><?= nl2br(htmlspecialchars($comment->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
+
+                    <?php include(__DIR__ . '/../../../templates/_comment_admin.php'); ?>
+
                 </div>
             <?php
             }

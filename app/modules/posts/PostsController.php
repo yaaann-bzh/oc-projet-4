@@ -9,7 +9,7 @@ use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
-use forteroche\vendor\model\UserManager;
+use forteroche\vendor\model\MemberManager;
 
 class PostsController extends ApplicationComponent
 {
@@ -19,7 +19,7 @@ class PostsController extends ApplicationComponent
     protected $view = '';
     protected $postManager = null;
     protected $commentManager = null;
-    protected $userManager = null;
+    protected $memberManager = null;
 
     public function __construct(Application $app, $module, $action)
     {
@@ -27,8 +27,8 @@ class PostsController extends ApplicationComponent
 
         $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
         $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
-        $this->userManager = new UserManager(PDOFactory::getMysqlConnexion());
-        $this->page = new Page;
+        $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion());
+        $this->page = new Page($app);
         $this->module = $module;
         $this->action = $action;
         $this->view = $action;
@@ -48,7 +48,33 @@ class PostsController extends ApplicationComponent
             throw new \RuntimeException('L\'action "'.$this->action.'" n\'est pas définie sur ce module');
         }
 
+        /*if (empty($_SESSION)) {
+            $this->defineUser();
+        //}*/
+
         $this->$method($this->app->httpRequest());
+    }
+
+    public function defineUser() {  
+        $auth = $this->app->httpRequest()->cookieData('auth');
+        $userId = $this->app->httpRequest()->cookieData('userId');
+        $pseudo = $this->app->httpRequest()->cookieData('pseudo');
+        $member = $this->memberManager->getSingle($userId);
+
+        var_dump($auth);
+        var_dump($userId);
+        var_dump($pseudo);
+        var_dump($member);
+        var_dump($_COOKIE);
+
+        if ($auth === 'true' AND $userId !== null AND $pseudo !== null AND $member !== null) {
+            if ($pseudo === $member->pseudo()) {
+                $this->app->user()->setAuthenticated(true);
+                $this->app->user()->setAttribute('id', $userId);
+                $this->app->user()->setAttribute('pseudo', $pseudo);
+                $this->app->user()->setAttribute('privilege', $member->privilege());
+            }
+        }       
     }
 
     public function executeIndex(HTTPRequest $request)
@@ -90,14 +116,15 @@ class PostsController extends ApplicationComponent
         $this->page->addVars('postsList', $postsList);
 
         $nbComments = [];
-        foreach ($postsList as $post) {  
-            $nbComments[$post->id()] = $this->commentManager->count('postId', $post->id());
+        foreach ($postsList as $post) {
+            $filters['postId'] = $post->id();
+            $nbComments[$post->id()] = $this->commentManager->count($filters);
         }
         $this->page->addVars('nbComments', $nbComments);
 
         $this->page->setTabTitle('Accueil');
         $this->page->setActiveNav('home');
-
+        
         $this->page->setContent(__DIR__.'/view/index.php');
         $this->page->generate();
     }
@@ -111,9 +138,9 @@ class PostsController extends ApplicationComponent
         }
         $comments = $this->commentManager->getByPost($id);
         
-        $users = [];
+        $members = [];
         foreach ($comments as $comment ) {
-            $users[$comment->id()] = $this->userManager->getSingle($comment->userId());
+            $members[$comment->id()] = $this->memberManager->getSingle($comment->memberId());
         }
 
         $nbPosts = $this->postManager->count();
@@ -154,7 +181,7 @@ class PostsController extends ApplicationComponent
 
         $this->page->addVars('post', $post);
         $this->page->addVars('comments', $comments);
-        $this->page->addVars('users', $users);
+        $this->page->addVars('members', $members);
 
         $this->page->addVars('prevPost', $prevPost);
         $this->page->addVars('nextPost', $nextPost);
