@@ -96,4 +96,19 @@ class CommentManager extends \framework\Manager
         
         $q->execute();
     }
+
+    public function update($id, $content)
+    {
+        $q = $this->dao->prepare('UPDATE comments SET content = :content, updateDate = NOW() WHERE id = :id');
+        
+        $q->bindValue(':content', $content);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
+    }
+
+    public function delete($id)
+    {
+        # code...
+    }
 }

@@ -38,6 +38,19 @@ class HTTPResponse extends ApplicationComponent
         $this->send();
     }
 
+    // redirection 403 :
+    public function redirect403()
+    {
+        $this->page = new Page($this->app);
+
+        $this->page->setContent(__DIR__.'/../../Errors/403.html');
+        $this->page->setTabTitle('Erreur 403');
+
+        $this->addHeader('HTTP/1.0 403 Forbidden');
+        
+        $this->send();
+    }
+
     // Envoyer la réponse en générant la page :
     public function send()
     {

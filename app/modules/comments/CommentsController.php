@@ -43,6 +43,17 @@ class CommentsController extends ApplicationComponent
         return $this->page;
     }
 
+    public function errorPage($intro, $message)
+    {       
+        $this->page->addVars('intro', $intro);
+        $this->page->addVars('message', $message);
+
+        $this->page->setTabTitle('Erreur');
+
+        $this->page->setContent(__DIR__.'/../../../Errors/modelError.php');
+        $this->page->generate();
+    }
+
     public function execute()
     {
         $method = 'execute'.ucfirst($this->action);
@@ -183,15 +194,8 @@ class CommentsController extends ApplicationComponent
                 $intro = 'Erreur lors de l\'ajout du commentaire';
                 $message = $e->getMessage();
             }
-            
-            $this->page->addVars('intro', $intro);
-            $this->page->addVars('message', $message);
-    
-            $this->page->setTabTitle('Erreur');
-    
-            $this->page->setContent(__DIR__.'/../../../Errors/modelError.php');
-            $this->page->generate();
-            
+
+            $this->errorPage($intro, $message);            
         }
     }
 
@@ -225,6 +229,66 @@ class CommentsController extends ApplicationComponent
         $this->page->setTabTitle('Signalement');
     
         $this->page->setContent(__DIR__.'/view/report.php');
+        $this->page->generate();
+    }
+
+    public function executeShow(HTTPRequest $request)
+    {
+        $commentId = (int)$request->getData('comment');
+        $updated = $request->getData('updated');
+        $comment = $this->commentManager->getSingle($commentId);
+        if (empty($comment)) {
+            $this->app->httpResponse()->redirect404();
+        } 
+
+        if ($request->postExists('action')) {
+            try {
+                switch ($request->postData('action')) { 
+                    case 'Modifier': 
+                        var_dump($request->postData('action'));
+                        $content = $request->postData('content');
+                        var_dump($content);
+                        var_dump($comment->id());
+                        $this->commentManager->update($comment->id(), $content);
+                        $suffixe = '-updated';
+                    break;
+
+                    case 'Supprimer': 
+                        $this->commentManager->delete($commentId);
+                        $suffixe = '';
+                    break;
+                }
+
+                $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
+
+            } catch (\Exception $e) {
+                $intro = 'Erreur lors de la modification du commentaire';
+                $message = $e->getMessage();
+            }
+
+            $this->errorPage($intro, $message);
+        }
+
+        $member = $this->memberManager->getSingle($comment->memberId());
+        $userId = (int)$this->app->user()->getAttribute('id');
+        $privilege = $this->app->user()->getAttribute('privilege');
+
+        if ($userId !== (int)$member->id()) {
+            if ($privilege === null) {
+                $this->app->httpResponse()->redirect403();
+            }
+        }
+
+        $post = $this->postManager->getSingle($comment->postId());
+        
+        $this->page->addVars('comment', $comment);
+        $this->page->addVars('member', $member);
+        $this->page->addVars('post', $post);
+        $this->page->addvars('updated', $updated);
+
+        $this->page->setTabTitle('Modification commentaire');
+
+        $this->page->setContent(__DIR__.'/view/single.php');
         $this->page->generate();
     }
 }

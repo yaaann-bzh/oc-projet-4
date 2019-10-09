@@ -7,6 +7,18 @@
     min-height: 80vh;
 }
 
+#valid-message{
+	border-radius: 15px;
+	border: green 2px solid;
+	color: green;
+	padding: 15px;
+}
+
+#valid-message p{
+	margin: 0;
+}
+
+
 /* FORMULAIRE DE CONNECTION - Debut --------------------------------------------------------------------------------------*/
 #connectincorrect{
 	height: 25px;
