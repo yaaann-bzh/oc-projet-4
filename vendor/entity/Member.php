@@ -11,6 +11,7 @@ class Member
     protected $memberName;
     protected $firstname;
     protected $inscriptionDate;
+    protected $connexionId;
 
     //Mother
     public function __construct(array $donnees = [])
@@ -91,6 +92,16 @@ class Member
         $this->inscriptionDate = $inscriptionDate;
     }
 
+    public function setConnexionId($connexionId)
+    {
+        if (!is_string($connexionId) || empty($connexionId))
+        {
+            throw new Exception('Le système a rencontré un problème : connexionId');
+        }
+
+        $this->connexionId = $connexionId;
+    }
+
     // GETTERS //
     public function id()
     {
@@ -125,5 +136,10 @@ class Member
     public function inscriptionDate()
     {
         return $this->inscriptionDate;
+    }
+
+    public function connexionId()
+    {
+        return $this->connexionId;
     }
 }

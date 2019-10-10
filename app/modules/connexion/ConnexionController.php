@@ -62,15 +62,12 @@ class ConnexionController extends ApplicationComponent
                     $this->app->user()->setAttribute('pseudo', $member->pseudo());
                     $this->app->user()->setAttribute('privilege', $member->privilege());
 
-                    /*if ($request->postData('remember') !== null) {
-                        $cookies = array(
-                            'auth' => 'true',
-                            'userId' => $member->id(),
-                            'pseudo' => $member->pseudo()
-                        );
-                        $this->app->httpResponse()->setCookie('auth', 'true', time() + 31*24*3600);
-                        $this->page->addVars('cookies', $cookies);
-                    }*/
+                    if ($request->postData('remember') !== null) {
+                        $connexionId = uniqid('', true);
+                        $this->app->httpResponse()->setCookie('auth', $connexionId, time() + 31*24*3600);
+                        $member->setConnexionId($connexionId);
+                        $this->memberManager->saveConnexionId($member->id(), $connexionId);         
+                    }
 
                     $this->app->httpResponse()->redirect('/');
 

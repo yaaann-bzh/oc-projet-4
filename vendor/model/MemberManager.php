@@ -52,4 +52,31 @@ class MemberManager extends \framework\Manager
         $sql = 'SELECT id FROM members WHERE ' . $key . '="' . $var . '"';
         return $this->dao->query($sql)->fetchColumn();
     }
+
+    public function saveConnexionId($id, $connexionId)
+    {
+        $q = $this->dao->prepare('UPDATE members SET connexionId = :connexionId WHERE id = :id');
+        
+        $q->bindValue(':connexionId', $connexionId);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
+    }
+
+    public function checkConnexionId($connexionId)
+    {
+        $req = $this->dao->prepare('SELECT * FROM members WHERE connexionId = :connexionId');
+        $req->bindValue(':connexionId', $connexionId);
+        $req->execute();
+        
+        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'forteroche\vendor\entity\Member');
+        
+        if ($member = $req->fetch())
+        {
+            $member->setInscriptionDate(new \DateTime($member->inscriptionDate()));
+            return $member;
+        }
+        
+        return null; 
+    }
 }

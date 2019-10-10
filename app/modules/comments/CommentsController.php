@@ -63,7 +63,26 @@ class CommentsController extends ApplicationComponent
             throw new \RuntimeException('L\'action "'.$this->action.'" n\'est pas définie sur ce module');
         }
 
+        if (empty($_SESSION)) {
+            $this->defineUser();
+        }
+
         $this->$method($this->app->httpRequest());
+    }
+
+    public function defineUser() {  
+        $auth = $this->app->httpRequest()->cookieData('auth');
+
+        if ($auth !== null) {
+            $member = $this->memberManager->checkConnexionId($auth);
+            if ($member !== null) {
+
+                $this->app->user()->setAuthenticated(true);
+                $this->app->user()->setAttribute('id', $member->id());
+                $this->app->user()->setAttribute('pseudo', $member->pseudo());
+                $this->app->user()->setAttribute('privilege', $member->privilege());
+            }
+        }  
     }
 
     public function executeIndex(HTTPRequest $request)
