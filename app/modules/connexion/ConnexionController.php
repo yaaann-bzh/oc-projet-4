@@ -3,48 +3,14 @@ namespace forteroche\app\modules\connexion;
 
 use framework\HTTPrequest;
 use framework\Application;
-use framework\ApplicationComponent;
+use framework\Controller;
 use framework\Manager;
 use framework\PDOFactory;
 use framework\Page;
-use forteroche\vendor\model\MemberManager;
+//use forteroche\vendor\model\MemberManager;
 
-class ConnexionController extends ApplicationComponent
+class ConnexionController extends Controller
 {
-    protected $action = '';
-    protected $module = '';
-    protected $page = null;
-    protected $view = '';
-    protected $memberManager = null;
-
-    public function __construct(Application $app, $module, $action)
-    {
-        parent::__construct($app);
-
-        $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion());
-        $this->page = new Page($app);
-        $this->module = $module;
-        $this->action = $action;
-        $this->view = $action;
-    }
-
-    public function page()
-    {
-        return $this->page;
-    }
-
-    public function execute()
-    {
-        $method = 'execute'.ucfirst($this->action);
-
-        if (!is_callable([$this, $method]))
-        {
-            throw new \RuntimeException('L\'action "'.$this->action.'" n\'est pas définie sur ce module');
-        }
-
-        $this->$method($this->app->httpRequest());
-    }
-
     public function executeIndex(HTTPRequest $request)
     {
         $this->page->setTabTitle('Connection');

@@ -52,7 +52,7 @@
                             </li>
                             <?php } else { ?>
                                 <li class="nav-item <?php if ($activeNav === 'connect') { echo ' active'; } ?>">
-                                    <a class="nav-link" href="/connection"><i class="fas fa-member-alt"></i> Se connecter</a>
+                                    <a class="nav-link" href="/user"><i class="fas fa-member-alt"></i> Se connecter</a>
                                 </li>
                             <?php } ?>
 
