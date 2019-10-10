@@ -36,8 +36,24 @@ class Post
     public function getExerpt()
     {
         $exerptLength = 200;
-        $textContent = nl2br(htmlspecialchars($this->content), ENT_QUOTES | ENT_SUBSTITUTE);
-        $fisrtBrPos = strpos($textContent, '<br />');
+        $inlines = ['em', 'strong', 'span', 'a', 'i', 'th', 'td', 'img'];
+        $blocks = ['p', 'h[1-6]', 'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr'];
+
+        $textContent = $this->content;
+        $endRegex = '[a-zA-Z0-9_=";\s/:\.\-]*>#';
+        foreach ($inlines as $inline) {
+            $regexInline = '#<[/]*' . $inline . $endRegex;
+            $textContent = preg_replace($regexInline, '', $textContent);
+        }
+
+        foreach ($blocks as $block) {
+            $regexBlockBegin = '#<' . $block . $endRegex;
+            $regexBlockEnd = '#</' . $block . $endRegex;
+            $textContent = preg_replace($regexBlockBegin, ' ', $textContent);
+            $textContent = preg_replace($regexBlockEnd, '<br/>', $textContent);
+        }
+
+        $fisrtBrPos = strpos($textContent, '<br/>');
 
         if ($fisrtBrPos <= 200) {
             $exerptLength = $fisrtBrPos;

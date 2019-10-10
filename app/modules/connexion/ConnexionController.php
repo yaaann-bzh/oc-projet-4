@@ -68,6 +68,7 @@ class ConnexionController extends ApplicationComponent
                             'userId' => $member->id(),
                             'pseudo' => $member->pseudo()
                         );
+                        $this->app->httpResponse()->setCookie('auth', 'true', time() + 31*24*3600);
                         $this->page->addVars('cookies', $cookies);
                     }*/
 

@@ -135,6 +135,7 @@ class PostsController extends ApplicationComponent
     {
         $id = (int)$request->getData('id');
         $post = $this->postManager->getSingle($id);
+
         if (empty($post)) {
             $this->app->httpResponse()->redirect404();
         }

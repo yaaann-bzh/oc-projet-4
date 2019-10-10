@@ -23,7 +23,12 @@
             </form>
 
             <script src="https://cdn.tiny.cloud/1/yyqsfdko2tg7akueyctfkasll6yienujy96w06tbyhvuuzlq/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
-            <script>tinymce.init({selector:'#content'});</script>
+            <script>
+                tinymce.init({
+                    selector:'#content',
+                    invalid_elements:'script'                
+                });
+            </script>
 
         </div>
     </div>    

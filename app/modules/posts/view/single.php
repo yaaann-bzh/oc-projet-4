@@ -54,7 +54,7 @@
                     } ?>                  
                 </p>
                 <hr class="my-4">
-                <p class="text-justify"><?= nl2br(htmlspecialchars($post->content(),ENT_QUOTES | ENT_SUBSTITUTE)); ?></p>
+                <p class="text-justify"><?= $post->content(); ?></p>
             </div>
 
             <div class="p-3" id="comments">
