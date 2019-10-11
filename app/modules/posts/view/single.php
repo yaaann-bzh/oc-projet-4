@@ -28,14 +28,15 @@
             <?php } ?>
 
             <div class="border p-3">
-                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <h1 class="display-5 w-100 col-lg-8"><?= $post->title(); ?></h1>
-                    <div class="d-flex w-100 justify-content-around align-item-center flex-md-column">
+                <div>
+                    <div class="d-flex w-100 justify-content-between align-item-center">
                         <?php if ($user->isAuthenticated()) { ?>
                             <p class="mb-2 text-right"><a class="text-white bg-primary p-1" href="/admin/post-<?= $post->id(); ?>">Modifier la publication</a></p>
                         <?php } ?>
                         <p class="mb-2 text-right"><a class="p-1" href="#comments">Commentaires <i class="fas fa-long-arrow-alt-down"></i></a></p>
                     </div>
+                    <h1 class="display-5 w-100"><?= $post->title(); ?></h1>
+
                 </div>
                 <p> 
                     <em>Publié le <?= $post->addDate()->format('d/m/Y à H\hi'); ?></em>

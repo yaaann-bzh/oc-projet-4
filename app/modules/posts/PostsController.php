@@ -166,8 +166,9 @@ class PostsController extends Controller
             try {
                 switch ($request->postData('action')) { 
                     case 'Modifier': 
+                        $title = $request->postData('title');
                         $content = $request->postData('content');
-                        $this->postManager->update($post->id(), $content);
+                        $this->postManager->update($post->id(), $title, $content);
                         $this->app->httpResponse()->redirect('/post-' . $postId . '-updated');
                     break;
 

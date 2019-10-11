@@ -66,10 +66,11 @@ class PostManager extends \framework\Manager
         $post->setId((int)$this->dao->lastInsertId());
     }
 
-    public function update($id, $content)
+    public function update($id, $title, $content)
     {
-        $q = $this->dao->prepare('UPDATE posts SET content = :content, updateDate = NOW() WHERE id = :id');
+        $q = $this->dao->prepare('UPDATE posts SET title = :title, content = :content, updateDate = NOW() WHERE id = :id');
         
+        $q->bindValue(':title', $title);
         $q->bindValue(':content', $content);
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
 
