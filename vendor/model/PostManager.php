@@ -81,5 +81,17 @@ class PostManager extends \framework\Manager
         $this->dao->exec('DELETE FROM posts WHERE id = '.(int) $id);
     }
 
+    public function getIdList()
+    {
+        $req = $this->dao->query('SELECT id FROM posts');
+        $req->setFetchMode(\PDO::FETCH_ASSOC);
+        $res = $req->fetchAll();
+        $idList = [];
+        foreach ($res as $id) {
+            $idList[] = (int)$id['id'];
+        }
+        return $idList;
+    }
+
 }
 

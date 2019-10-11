@@ -39,12 +39,12 @@
                 <div class="border p-3">
                     <div class="d-flex justify-content-between">
                         <h2><a href="post-<?= $post->id(); ?>"><?= htmlspecialchars($post->title(),ENT_QUOTES | ENT_SUBSTITUTE); ?></a></h2>
-                        <span>
+                        <div class="flex-shrink-0">
                             <a href="post-<?= $post->id(); ?>#comments" title="Commentaires" class="badge badge-primary badge-pill"><?= $nbComments[$post->id()]; ?></a>
                             <button class="collapsed btn btn-light ml-2" type="button" data-toggle="collapse" data-target="#postContent-<?= $post->id(); ?>" aria-controls="postContent-<?= $post->id(); ?>" aria-expanded="false" aria-label="Toggle">
                                 <i class="fas fa-chevron-down fa-2x"></i>
                             </button>
-                        </span>
+                        </div>
 
                     </div>
                     <div class="collapse" id="postContent-<?= $post->id(); ?>" style="">

@@ -80,42 +80,34 @@ class PostsController extends Controller
         foreach ($comments as $comment ) {
             $members[$comment->id()] = $this->memberManager->getSingle($comment->memberId());
         }
-
-        $nbPosts = $this->postManager->count();
-        $nbTab = 4;
-        $dotBefore = false;
-        $dotAfter = false;
         
-        if ($id === 1) {
-            $prevPost = 'post-' . ($id + 1);
-            $nextPost = '#';
-            $begin = $nbTab + 1;
-            $end = 1;
-            $dotBefore = true;
-        } elseif ($id === $nbPosts) {
-            $prevPost = '#';
-            $nextPost = 'post-' . ($id - 1);
-            $begin = $nbPosts ;
-            $end = $nbPosts - $nbTab - 1;
-            $dotAfter = true;
-        } else {
-            if ($id <= $nbTab / 2 ) {
-                $begin = $nbTab + 1;
-                $end = 1;
-                $dotBefore = true;
-            } elseif ($id >= $nbPosts - $nbTab / 2) {
-                $begin = $nbPosts ;
-                $end = $nbPosts - $nbTab - 1;
-                $dotAfter = true;
-            } else {
-                $dotBefore = true;
-                $dotAfter = true;
-                $begin = $id + (int)($nbTab / 2);
-                $end = $id - (int)($nbTab / 2);
+        $pagination = [];
+        $pagination['total'] = $this->postManager->count();
+        $postsIdList = $this->postManager->getIdList();
+
+        $rank = array_search((int)$post->id(), $postsIdList) + 1;
+        
+            switch ($rank) {
+                case 1:
+                    $pagination['nextLink'] = 'post-' . $postsIdList[$rank];
+                    $pagination['current'] = $rank;
+                    $pagination['prevLink'] = '#';
+                break;
+
+                case count($postsIdList):
+                    $pagination['nextLink'] = '#';
+                    $pagination['current'] = $rank;
+                    $pagination['prevLink'] = 'post-' . $postsIdList[$rank - 2];
+                break;
+                
+                default:
+                    $pagination['nextLink'] = 'post-' . $postsIdList[$rank];
+                    $pagination['current'] = $rank;
+                    $pagination['prevLink'] = 'post-' . $postsIdList[$rank - 2];
+                break;
             }
-            $prevPost = 'post-' . ($id + 1);
-            $nextPost = 'post-' . ($id - 1);
-        }
+               
+        $this->page->addVars('pagination', $pagination);
 
         $updated = $request->getData('updated');
         $this->page->addvars('updated', $updated);
@@ -123,13 +115,6 @@ class PostsController extends Controller
         $this->page->addVars('post', $post);
         $this->page->addVars('comments', $comments);
         $this->page->addVars('members', $members);
-
-        $this->page->addVars('prevPost', $prevPost);
-        $this->page->addVars('nextPost', $nextPost);
-        $this->page->addVars('begin', $begin);
-        $this->page->addVars('end', $end);
-        $this->page->addVars('dotBefore', $dotBefore);
-        $this->page->addVars('dotAfter', $dotAfter);
 
         $this->page->setTabTitle($post->title());
 

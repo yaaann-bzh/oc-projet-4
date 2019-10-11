@@ -3,38 +3,16 @@
         <div class="col-12 col-md-8">
             <nav class="m-3">
                 <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="<?= $prevPost; ?>" aria-label="Previous">
+                    <li class="page-item <?php if ($pagination['nextLink'] === '#') { echo 'disabled'; } ?>">
+                        <a class="page-link" href="<?= $pagination['nextLink']; ?>" aria-label="Next" title="Plus récent">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
-                    <?php
-                    if ($dotBefore === true) {
-                        ?>
-                        <li class="page-item">
-                            <a href="#" class="page-link">...</a>
-                        </li>
-                        <?php
-                    }
-
-                    for ($i=$begin; $i >= $end; $i--) {
-                        ?>
-                        <li class="page-item 
-                        <?php if ((int)$post->id() === $i) { echo ' active'; } ?>
-                        "><a class="page-link" href="post-<?= $i; ?>"><?= $i; ?></a></li>
-                        <?php
-                    }
-
-                    if ($dotAfter === true) {
-                        ?>
-                        <li class="page-item">
-                            <a href="#" class="page-link">...</a>
-                        </li>
-                        <?php
-                    }
-                    ?>
                     <li class="page-item">
-                        <a class="page-link" href="<?= $nextPost; ?>" aria-label="Next">
+                        <a class="page-link" href="#"  title="Publication courante"><?= $pagination['current']; ?> / <?= $pagination['total']; ?> </a>
+                    </li>
+                    <li class="page-item <?php if ($pagination['prevLink'] === '#') { echo 'disabled'; } ?>">
+                        <a class="page-link" href="<?= $pagination['prevLink']; ?>" aria-label="Previous" title="Plus ancien">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -51,7 +29,7 @@
 
             <div class="border p-3">
                 <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                    <h1 class="display-5 w-100"><?= $post->title(); ?></h1>
+                    <h1 class="display-5 w-100 col-lg-8"><?= $post->title(); ?></h1>
                     <div class="d-flex w-100 justify-content-around align-item-center flex-md-column">
                         <?php if ($user->isAuthenticated()) { ?>
                             <p class="mb-2 text-right"><a class="text-white bg-primary p-1" href="/admin/post-<?= $post->id(); ?>">Modifier la publication</a></p>
