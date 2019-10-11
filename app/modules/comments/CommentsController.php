@@ -15,17 +15,6 @@ use forteroche\vendor\entity\Comment;
 
 class CommentsController extends Controller 
 {
-    public function errorPage($intro, $message)
-    {       
-        $this->page->addVars('intro', $intro);
-        $this->page->addVars('message', $message);
-
-        $this->page->setTabTitle('Erreur');
-
-        $this->page->setContent(__DIR__.'/../../../Errors/modelError.php');
-        $this->page->generate();
-    }
-
     public function executeIndex(HTTPRequest $request)
     {
         $nbComments = 10;
@@ -210,10 +199,7 @@ class CommentsController extends Controller
             try {
                 switch ($request->postData('action')) { 
                     case 'Modifier': 
-                        var_dump($request->postData('action'));
                         $content = $request->postData('content');
-                        var_dump($content);
-                        var_dump($comment->id());
                         $this->commentManager->update($comment->id(), $content);
                         $suffixe = '-updated';
                     break;

@@ -41,10 +41,23 @@
                 </ul>
             </nav>
 
+            <?php if (isset($updated)) { ?>        
+                <div class="form-group row">
+                    <div class="col-12 col-lg-6 bg-light" id="valid-message">
+                        <p>La publication a été mise à jour.</p>
+                    </div>
+                </div>
+            <?php } ?>
+
             <div class="border p-3">
-                <div class="d-flex justify-content-between align-items-center">
-                    <h1 class="display-5"><?= $post->title(); ?></h1>
-                    <p><a href="#comments">Commentaires <i class="fas fa-long-arrow-alt-down"></i></a></p>
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                    <h1 class="display-5 w-100"><?= $post->title(); ?></h1>
+                    <div class="d-flex w-100 justify-content-around align-item-center flex-md-column">
+                        <?php if ($user->isAuthenticated()) { ?>
+                            <p class="mb-2 text-right"><a class="text-white bg-primary p-1" href="/admin/post-<?= $post->id(); ?>">Modifier la publication</a></p>
+                        <?php } ?>
+                        <p class="mb-2 text-right"><a class="p-1" href="#comments">Commentaires <i class="fas fa-long-arrow-alt-down"></i></a></p>
+                    </div>
                 </div>
                 <p> 
                     <em>Publié le <?= $post->addDate()->format('d/m/Y à H\hi'); ?></em>

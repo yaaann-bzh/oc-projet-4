@@ -43,6 +43,17 @@ class Controller extends ApplicationComponent
         return $this->page;
     }
 
+    public function errorPage($intro, $message)
+    {       
+        $this->page->addVars('intro', $intro);
+        $this->page->addVars('message', $message);
+
+        $this->page->setTabTitle('Erreur');
+
+        $this->page->setContent(__DIR__.'/../../Errors/modelError.php');
+        $this->page->generate();
+    }
+
     public function execute()
     {
         $method = 'execute'.ucfirst($this->action);

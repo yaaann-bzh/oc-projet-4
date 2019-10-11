@@ -66,5 +66,20 @@ class PostManager extends \framework\Manager
         $post->setId((int)$this->dao->lastInsertId());
     }
 
+    public function update($id, $content)
+    {
+        $q = $this->dao->prepare('UPDATE posts SET content = :content, updateDate = NOW() WHERE id = :id');
+        
+        $q->bindValue(':content', $content);
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
+    }
+
+    public function delete($id)
+    {
+        $this->dao->exec('DELETE FROM posts WHERE id = '.(int) $id);
+    }
+
 }
 

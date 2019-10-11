@@ -16,7 +16,7 @@ class PostsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        // Insérer redirection vers index-1 si url ='/'
+        // Insérer redirection vers index-1 si url ='/' pour éviter duplication de contenu
         $nbPosts = 5;
         $nbPages = (int)ceil($this->postManager->count() / $nbPosts);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
@@ -117,6 +117,9 @@ class PostsController extends Controller
             $nextPost = 'post-' . ($id - 1);
         }
 
+        $updated = $request->getData('updated');
+        $this->page->addvars('updated', $updated);
+
         $this->page->addVars('post', $post);
         $this->page->addVars('comments', $comments);
         $this->page->addVars('members', $members);
@@ -163,5 +166,47 @@ class PostsController extends Controller
         $this->page->setContent(__DIR__.'/view/redaction.php');
         $this->page->generate();
         
+    }
+
+    public function executeUpdate(HTTPRequest $request)
+    {
+        $postId = (int)$request->getData('post');
+        $post = $this->postManager->getSingle($postId);
+
+        if (empty($post)) {
+            $this->app->httpResponse()->redirect404();
+        }
+
+        if ($request->postExists('action')) {
+            try {
+                switch ($request->postData('action')) { 
+                    case 'Modifier': 
+                        $content = $request->postData('content');
+                        $this->postManager->update($post->id(), $content);
+                        $this->app->httpResponse()->redirect('/post-' . $postId . '-updated');
+                    break;
+
+                    case 'Supprimer': 
+                        $this->postManager->delete($post->id());
+                        $this->commentManager->deleteFromPost($post->id());
+                        $this->app->httpResponse()->redirect('/');
+                    break;
+                }
+
+            } catch (\Exception $e) {
+                $intro = 'Erreur lors de la modification de la publication';
+                $message = $e->getMessage();
+            }
+
+            $this->errorPage($intro, $message);
+        }
+
+        $this->page->addVars('post', $post);
+
+        $this->page->setTabTitle('Edition');
+        $this->page->setActiveNav('redaction');
+
+        $this->page->setContent(__DIR__.'/view/redaction.php');
+        $this->page->generate();
     }
 }

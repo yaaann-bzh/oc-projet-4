@@ -13,13 +13,18 @@
             <form method="post" action="" class="mb-3">
                 <div class="form-group">
                     <label for="title">Titre :</label>
-                    <input class="form-control col-12 col-md-10 col-lg-8" type="text" name="title" id="title" autofocus required>
+                    <input class="form-control col-12 col-md-10 col-lg-8" type="text" name="title" id="title" autofocus required value="<?php if (isset($post)) { echo $post->title(); } ?>">
                 </div>
                 <div class="form-group">
                     <label for="content">Texte :</label>
-                    <textarea name="content" id="content" cols="30" rows="20"></textarea>
+                    <textarea name="content" id="content" cols="30" rows="20"><?php if (isset($post)) { echo $post->content(); } ?></textarea>
                 </div>
-                <input type="submit" class="btn btn-primary" value="Publier">
+                <?php if (isset($post)) { ?>
+                    <input type="submit" class="btn btn-success mr-3" name="action" value="Modifier">
+                    <input type="submit" class="btn btn-danger" name="action" value="Supprimer">
+                <?php } else { ?>
+                    <input type="submit" class="btn btn-primary" value="Publier">
+                <?php } ?>
             </form>
 
             <script src="https://cdn.tiny.cloud/1/yyqsfdko2tg7akueyctfkasll6yienujy96w06tbyhvuuzlq/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>

@@ -123,4 +123,9 @@ class CommentManager extends \framework\Manager
 
         $q->execute();
     }
+
+    public function deleteFromPost($postId)
+    {
+        $this->dao->exec('DELETE FROM comments WHERE postId = '.(int) $postId);
+    }
 }
