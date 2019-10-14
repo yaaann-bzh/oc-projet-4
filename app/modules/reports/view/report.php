@@ -37,7 +37,8 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="content">Souhaitez vous ajouter un commentaire :</label>
+                    <label class="mb-0" for="content">Souhaitez vous ajouter une précision pour les modérateurs :</label>
+                    <small class="form-text text-muted m-0 ml-3 mb-1">Seule l'équipe de modération pourra lire votre commentaire.</small>
                     <textarea class="form-control" name="content" id="content" cols="30" rows="2"></textarea>
                 </div>
                 <button type="submit" class="btn btn-danger">Signaler</button>

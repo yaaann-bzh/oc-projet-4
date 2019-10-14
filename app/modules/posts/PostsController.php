@@ -7,9 +7,6 @@ use framework\Controller;
 use framework\Manager;
 use framework\PDOFactory;
 use framework\Page;
-//use forteroche\vendor\model\PostManager;
-//use forteroche\vendor\model\CommentManager;
-//use forteroche\vendor\model\MemberManager;
 use forteroche\vendor\entity\Post;
 
 class PostsController extends Controller
@@ -54,7 +51,7 @@ class PostsController extends Controller
 
         $nbComments = [];
         foreach ($postsList as $post) {
-            $filters['postId'] = $post->id();
+            $filters['postId'] = '=' . $post->id();
             $nbComments[$post->id()] = $this->commentManager->count($filters);
         }
         $this->page->addVars('nbComments', $nbComments);
@@ -74,7 +71,9 @@ class PostsController extends Controller
         if (empty($post)) {
             $this->app->httpResponse()->redirect404();
         }
-        $comments = $this->commentManager->getByPost($id);
+
+        $filters['postId'] = '=' . $id;
+        $comments = $this->commentManager->getList(null, null, $filters);
         
         $members = [];
         foreach ($comments as $comment ) {

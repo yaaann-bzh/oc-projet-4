@@ -10,6 +10,7 @@ class Comment
     protected $content;
     protected $addDate;
     protected $updateDate;
+    protected $reportDate;
 
     //Mother
     public function __construct(array $donnees = [])
@@ -71,6 +72,11 @@ class Comment
         return $this->updateDate;
     }
 
+    public function reportDate()
+    {
+        return $this->reportDate;
+    }
+
     // Setters //
     
     public function setMemberId($memberId)
@@ -111,6 +117,11 @@ class Comment
     public function setUpdateDate(\DateTime $updateDate)
     {
         $this->updateDate = $updateDate;
+    }
+
+    public function setReportDate(\DateTime $reportDate)
+    {
+        $this->reportDate = $reportDate;
     }
 
 }

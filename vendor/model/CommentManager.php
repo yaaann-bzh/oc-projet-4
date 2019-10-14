@@ -3,28 +3,6 @@ namespace forteroche\vendor\model;
 
 class CommentManager extends \framework\Manager 
 {
-    public function getByPost($id)
-    {
-        $req = $this->dao->prepare('SELECT * FROM comments WHERE postId = :postId ORDER BY addDate DESC');
-        $req->bindValue(':postId', (int) $id, \PDO::PARAM_INT);
-        $req->execute();
-
-        $req->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, 'forteroche\vendor\entity\Comment');
-
-        $comments = $req->fetchAll();
-
-        foreach ($comments as $comment ) {
-            $comment->setAddDate(new \DateTime($comment->addDate()));
-            if ($comment->updateDate() != null) {
-                $comment->setUpdateDate(new \DateTime($comment->updateDate()));
-            }
-        }
-        
-        $req->closeCursor();
-        
-        return $comments;
-    }
-
     public function getList($debut, $limit, $filters=[])
     {
         $sql = 'SELECT * FROM comments';
@@ -32,14 +10,14 @@ class CommentManager extends \framework\Manager
         if (!empty($filters)) {
             $sql .= ' WHERE ';
             foreach ($filters as $key => $filter) {
-                $sql .= $key . '=' . $filter . ' AND ';
+                $sql .= $key . $filter . ' AND ';
             }
             $sql = substr($sql, 0, -5);
         }
 
         $sql .= ' ORDER BY addDate DESC';
 
-        if (isset($debut) && isset($limit)) {
+        if ($debut !== null && $limit !== null) {
             $sql .= ' LIMIT ' .(int) $limit.' OFFSET '.(int) $debut; 
         }
 
@@ -52,6 +30,9 @@ class CommentManager extends \framework\Manager
             $comment->setAddDate(new \DateTime($comment->addDate()));
             if ($comment->updateDate() != null) {
                 $comment->setUpdateDate(new \DateTime($comment->updateDate()));
+            }
+            if ($comment->reportDate() != null) {
+                $comment->setReportDate(new \DateTime($comment->reportDate()));
             }
         }
         
@@ -87,7 +68,7 @@ class CommentManager extends \framework\Manager
         if (!empty($filters)) {
             $sql .= ' WHERE ';
             foreach ($filters as $key => $filter) {
-                $sql .= $key . '=' . $filter . ' AND ';
+                $sql .= $key . $filter . ' AND ';
             }
             $sql = substr($sql, 0, -5);
         }
@@ -127,5 +108,14 @@ class CommentManager extends \framework\Manager
     public function deleteFromPost($postId)
     {
         $this->dao->exec('DELETE FROM comments WHERE postId = '.(int) $postId);
+    }
+
+    public function setReported($id)
+    {
+        $q = $this->dao->prepare('UPDATE comments SET reportDate = NOW() WHERE id = :id');
+        
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
     }
 }

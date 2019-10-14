@@ -11,11 +11,13 @@
     <route url="/deconnection" module="connexion" action="disconnect" ></route>
 
     <route url="/user/insert-comment-([0-9]+)" module="comments" action="insert" vars="post"></route>
-    <route url="/user/comment-report-([0-9]+)" module="comments" action="report" vars="comment"></route>   
     <route url="/user/comment-([0-9]+)-?(updated)?" module="comments" action="show" vars="comment,updated"></route>
+    <route url="/user/comment-report-([0-9]+)" module="reports" action="report" vars="comment"></route>
 
     <route url="/admin/" module="posts" action="index" ></route>
     <route url="/admin/redaction" module="posts" action="redaction"></route>
     <route url="/admin/post-([0-9]+)" module="posts" action="update" vars="post"></route>
+    <route url="/admin/reports-index-([0-9]+)" module="reports" action="index" vars="index"></route>   
+
 
 </routes>

@@ -7,10 +7,6 @@ use framework\Controller;
 use framework\Manager;
 use framework\PDOFactory;
 use framework\Page;
-//use forteroche\vendor\model\PostManager;
-//use forteroche\vendor\model\CommentManager;
-//use forteroche\vendor\model\MemberManager;
-//use forteroche\vendor\model\ReportManager;
 use forteroche\vendor\entity\Comment;
 
 class CommentsController extends Controller 
@@ -18,7 +14,7 @@ class CommentsController extends Controller
     public function executeIndex(HTTPRequest $request)
     {
         $nbComments = 10;
-        $filters['removed'] = 0;
+        $filters['removed'] = '=' . 0;
 
         $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
@@ -80,8 +76,8 @@ class CommentsController extends Controller
         }
         $this->page->addVars('member', $member);
 
-        $filters['memberId'] = $member->id();
-        $filters['removed'] = 0;
+        $filters['memberId'] = '=' . $member->id();
+        $filters['removed'] = '=' . 0;
 
         $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
@@ -151,39 +147,6 @@ class CommentsController extends Controller
 
             $this->errorPage($intro, $message);            
         }
-    }
-
-    public function executeReport(HTTPRequest $request)
-    {
-        $commentId = (int)$request->getData('comment');
-        $comment = $this->commentManager->getSingle($commentId);
-        if (empty($comment)) {
-            $this->app->httpResponse()->redirect404();
-        }
-        $member = $this->memberManager->getSingle($comment->memberId());
-        $post = $this->postManager->getSingle($comment->postId());
-        $userId = (int)$this->app->user()->getAttribute('id');
-
-        if ($request->postExists('motif')) {
-            $content = $request->postData('motif') . ' - ' . $request->postData('content');
-            $this->reportManager->add($userId, $commentId, $content);
-        }
-
-        $reportId = (int)$this->reportManager->getId($commentId, $userId);
-
-        if ($reportId !== null) {
-            $report = $this->reportManager->getSingle($reportId);
-            $this->page->addVars('report', $report);
-        }
-
-        $this->page->addVars('comment', $comment);
-        $this->page->addVars('member', $member);
-        $this->page->addVars('post', $post);
-
-        $this->page->setTabTitle('Signalement');
-    
-        $this->page->setContent(__DIR__.'/view/report.php');
-        $this->page->generate();
     }
 
     public function executeShow(HTTPRequest $request)
