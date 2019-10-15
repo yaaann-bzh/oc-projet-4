@@ -169,6 +169,8 @@ class CommentsController extends Controller
 
                     case 'Supprimer': 
                         $this->commentManager->delete($commentId);
+                        $this->reportManager->clear($commentId);
+                        $this->commentManager->clearReports($commentId);
                         $suffixe = '';
                     break;
                 }

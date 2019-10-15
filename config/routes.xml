@@ -18,6 +18,7 @@
     <route url="/admin/redaction" module="posts" action="redaction"></route>
     <route url="/admin/post-([0-9]+)" module="posts" action="update" vars="post"></route>
     <route url="/admin/reports-index-([0-9]+)" module="reports" action="index" vars="index"></route>   
+    <route url="/admin/reports-([0-9]+)" module="reports" action="show" vars="comment"></route>   
 
 
 </routes>

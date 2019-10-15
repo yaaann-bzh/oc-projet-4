@@ -7,6 +7,7 @@ class Report
     protected $authorId;
     protected $commentId;
     protected $content;
+    protected $commentContent;
     protected $reportDate;
 
     //Mother
@@ -58,10 +59,20 @@ class Report
     {
         if (!is_string($content) || empty($content))
         {
-            throw new Exception('Contenu du post invalide');
+            throw new Exception('Contenu du signalement invalide');
         }
 
         $this->content = $content;
+    }
+
+    public function setCommentContent($commentContent)
+    {
+        if (!is_string($commentContent) || empty($commentContent))
+        {
+            throw new Exception('Contenu du commentaire signalé invalide');
+        }
+
+        $this->commentContent = $commentContent;
     }
 
     public function setReportDate(\DateTime $reportDate)
@@ -89,6 +100,11 @@ class Report
     public function content()
     {
         return $this->content;
+    }
+
+    public function commentContent()
+    {
+        return $this->commentContent;
     }
 
     public function reportDate()

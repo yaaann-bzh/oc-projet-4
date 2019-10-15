@@ -118,4 +118,13 @@ class CommentManager extends \framework\Manager
 
         $q->execute();
     }
+
+    public function clearReports($id)
+    {
+        $q = $this->dao->prepare('UPDATE comments SET reportDate = NULL WHERE id = :id');
+        
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
+    }
 }

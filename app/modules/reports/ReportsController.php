@@ -51,15 +51,11 @@ class ReportsController extends Controller
         foreach ($reportedComments as $comment) {
             $filter['commentId'] = '=' . $comment->id();
             $nbReports[$comment->id()] = $this->reportManager->count($filter);
-            $reports[$comment->id()] = $this->reportManager->getList(null, null, $filter);
             $members[$comment->id()] = $this->memberManager->getSingle($comment->memberId());
         }
 
-        if (!empty($reports)) {
-            $this->page->addVars('nbReports', $nbReports);
-            $this->page->addVars('reports', $reports);
-            $this->page->addVars('members', $members);
-        }
+        $this->page->addVars('nbReports', $nbReports);
+        $this->page->addVars('members', $members);
 
         $this->page->setTabTitle('Signalements');
         $this->page->setActiveNav('reports');
@@ -78,19 +74,19 @@ class ReportsController extends Controller
         $member = $this->memberManager->getSingle($comment->memberId());
         $post = $this->postManager->getSingle($comment->postId());
         $userId = (int)$this->app->user()->getAttribute('id');
-
+        
         if ($request->postExists('motif')) {
-            $content = $request->postData('motif') . ' - ' . $request->postData('content');
-            $this->reportManager->add($userId, $commentId, $content, $comment->content());
+            $content = $request->postData('motif') . ' : ' . $request->postData('content');
+            $report = $this->reportManager->add($userId, $commentId, $content, $comment->content());
             $this->commentManager->setReported($commentId);
         }
 
         $reportId = (int)$this->reportManager->getId($commentId, $userId);
 
-        if ($reportId !== null) {
+        if ($reportId !== 0) {
             $report = $this->reportManager->getSingle($reportId);
             $this->page->addVars('report', $report);
-        }
+        } 
 
         $this->page->addVars('comment', $comment);
         $this->page->addVars('member', $member);
@@ -99,6 +95,66 @@ class ReportsController extends Controller
         $this->page->setTabTitle('Signalement');
     
         $this->page->setContent(__DIR__.'/view/report.php');
+        $this->page->generate();
+    }
+
+    public function executeShow(HTTPRequest $request)
+    {
+        $commentId = (int)$request->getData('comment');
+        $updated = $request->getData('updated');
+        $comment = $this->commentManager->getSingle($commentId);
+        $filter['commentId'] = '=' . $comment->id();
+        $reports = $this->reportManager->getList(null, null, $filter);
+
+        if (empty($comment) OR empty($reports)) {
+            $this->app->httpResponse()->redirect404();
+        }
+        
+        $members = [];
+        foreach ($reports as $report) {
+            $members[$report->id()] = $this->memberManager->getSingle($report->authorId())->pseudo();
+        }
+
+        if ($request->postExists('action')) {
+            try {
+                switch ($request->postData('action')) { 
+                    case 'Modifier': 
+                        $content = $request->postData('content');
+                        $this->commentManager->update($comment->id(), $content);
+                        $suffixe = '-updated';
+                    break;
+
+                    case 'Supprimer': 
+                        $this->commentManager->delete($commentId);
+                        $suffixe = '';
+                    break;
+                }
+
+                $this->reportManager->clear($commentId);
+                $this->commentManager->clearReports($commentId);
+                $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
+
+            } catch (\Exception $e) {
+                $intro = 'Erreur lors de la modification du commentaire';
+                $message = $e->getMessage();
+            }
+
+            $this->errorPage($intro, $message);
+        }
+
+        $member = $this->memberManager->getSingle($comment->memberId());
+        $post = $this->postManager->getSingle($comment->postId());
+        
+        $this->page->addVars('comment', $comment);
+        $this->page->addVars('member', $member);
+        $this->page->addVars('members', $members);
+        $this->page->addVars('reports', $reports);
+        $this->page->addVars('post', $post);
+        $this->page->addvars('updated', $updated);
+
+        $this->page->setTabTitle('Signalements');
+
+        $this->page->setContent(__DIR__.'/view/single.php');
         $this->page->generate();
     }
 }

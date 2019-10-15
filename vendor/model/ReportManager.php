@@ -27,7 +27,7 @@ class ReportManager extends \framework\Manager
 
         foreach ($reports as $report)
         {
-            $report->reportDate(new \DateTime($report->reportDate()));
+            $report->setReportDate(new \DateTime($report->reportDate()));
         }
         
         $req->closeCursor();
@@ -87,5 +87,10 @@ class ReportManager extends \framework\Manager
         }
         
         return null;  
+    }
+
+    public function clear($commentId)
+    {
+        $this->dao->exec('DELETE FROM reports WHERE commentId = '.(int) $commentId);
     }
 }
