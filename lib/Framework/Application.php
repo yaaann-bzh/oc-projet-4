@@ -82,10 +82,10 @@ abstract class Application
     public function getDBConnexion()
     {
         return array(
-            'db_host' => $this->config->get('db_host'),
-            'db_name' => $this->config->get('db_name'),
-            'db_user' => $this->config->get('db_user'),
-            'db_pass' => $this->config->get('db_pass')
+            'db_host' => $this->config->get('pdo', 'db_host'),
+            'db_name' => $this->config->get('pdo', 'db_name'),
+            'db_user' => $this->config->get('pdo', 'db_user'),
+            'db_pass' => $this->config->get('pdo', 'db_pass')
         );
     }
 

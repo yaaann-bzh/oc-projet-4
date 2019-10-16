@@ -12,11 +12,11 @@ class PostsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        $nbPosts = $this->app->config()->get('nb_posts');
+        $nbPosts = $this->app->config()->get('display', 'nb_posts');
         $nbPages = (int)ceil($this->postManager->count() / $nbPosts);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 
-        $exerptLength = $this->app->config()->get('nb_chars');
+        $exerptLength = $this->app->config()->get('display', 'nb_chars');
 
         $index = (int)$request->getData('index');
     

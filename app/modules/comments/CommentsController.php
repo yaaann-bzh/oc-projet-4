@@ -12,7 +12,7 @@ class CommentsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        $nbComments = $this->app->config()->get('nb_comments');
+        $nbComments = $this->app->config()->get('display', 'nb_comments');
         $filters['removed'] = '=' . 0;
 
         $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
@@ -65,7 +65,7 @@ class CommentsController extends Controller
 
     public function executeIndexByMember(HTTPRequest $request)
     {
-        $nbComments = $this->app->config()->get('nb_comments');
+        $nbComments = $this->app->config()->get('display', 'nb_comments');
         $memberId = (int)$request->getData('member');
         $index = (int)$request->getData('index');
 

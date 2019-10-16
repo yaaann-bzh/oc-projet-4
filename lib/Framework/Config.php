@@ -5,12 +5,12 @@ class Config extends ApplicationComponent
 {
     protected $vars = [];
 
-    public function get($var)
+    public function get($fileName, $var)
     {
         if (!$this->vars)
         {
             $xml = new \DOMDocument;
-            $xml->load(__DIR__.'/../../config/app.xml');
+            $xml->load(__DIR__.'/../../config/' . $fileName . '.xml');
 
             $elements = $xml->getElementsByTagName('define');
 

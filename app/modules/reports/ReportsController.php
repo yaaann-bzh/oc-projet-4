@@ -12,7 +12,7 @@ class ReportsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        $nbReportedComments = $this->app->config()->get('nb_reports');
+        $nbReportedComments = $this->app->config()->get('display', 'nb_reports');
         $nbPages = (int)ceil($this->reportManager->countComments() / $nbReportedComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 
