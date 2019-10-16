@@ -7,11 +7,11 @@ class Config extends ApplicationComponent
 
     public function get($fileName, $var)
     {
-        if (!$this->vars)
+        if (!isset($this->vars[$var]))
         {
             $xml = new \DOMDocument;
             $xml->load(__DIR__.'/../../config/' . $fileName . '.xml');
-
+            
             $elements = $xml->getElementsByTagName('define');
 
             foreach ($elements as $element)
