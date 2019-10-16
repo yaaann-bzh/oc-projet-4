@@ -5,7 +5,6 @@ use framework\HTTPrequest;
 use framework\Application;
 use framework\Controller;
 use framework\Manager;
-use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\entity\Report;
 
@@ -13,7 +12,7 @@ class ReportsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        $nbReportedComments = 20;
+        $nbReportedComments = $this->app->config()->get('nb_reports');
         $nbPages = (int)ceil($this->reportManager->countComments() / $nbReportedComments);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
 

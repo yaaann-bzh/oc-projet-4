@@ -7,6 +7,7 @@ use framework\HTTPResponse;
 use framework\Router;
 use framework\Route;
 use framework\User;
+use framework\Config;
 
 abstract class Application
 {
@@ -14,12 +15,14 @@ abstract class Application
     protected $httpResponse;
     protected $name;
     protected $user;
+    protected $config;
 
     public function __construct()
     {
         $this->httpRequest = new HTTPRequest($this);
         $this->httpResponse = new HTTPResponse($this);
         $this->user = new User();
+        $this->config = new Config($this);
     }
     
     public function getController()
@@ -60,14 +63,30 @@ abstract class Application
 
         $module = $matchedRoute->module();
         $action = $matchedRoute->action();
+
         // On instancie le contrôleur.
         $controllerClass = 'forteroche\\app\\modules\\'.$module.'\\'.ucfirst($module).'Controller';
-        return new $controllerClass($this, $module, $action);
+        return new $controllerClass($this, $module, $action, $this->getDBConnexion());
     }
     
     public function user()
     {
         return $this->user;
+    }
+
+    public function config()
+    {
+        return $this->config;
+    }
+
+    public function getDBConnexion()
+    {
+        return array(
+            'db_host' => $this->config->get('db_host'),
+            'db_name' => $this->config->get('db_name'),
+            'db_user' => $this->config->get('db_user'),
+            'db_pass' => $this->config->get('db_pass')
+        );
     }
 
     public function httpRequest()

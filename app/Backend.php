@@ -16,7 +16,7 @@ class Backend extends Application
         }
         else
         {
-            $controller = new ConnexionController($this, 'connexion', 'index');
+            $controller = new ConnexionController($this, 'connexion', 'index', $this->getDBConnexion());
         }
 
         $controller->execute();

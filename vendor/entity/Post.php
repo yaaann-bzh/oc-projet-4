@@ -33,9 +33,8 @@ class Post
         }
     }
 
-    public function getExerpt()
+    public function getExerpt($exerptLength)
     {
-        $exerptLength = 200;
         $inlines = ['em', 'strong', 'span', 'a', 'i', 'th', 'td', 'img'];
         $blocks = ['p', 'h[1-6]', 'ul', 'ol', 'li', 'table', 'thead', 'tbody', 'tr'];
 
@@ -55,7 +54,7 @@ class Post
 
         $fisrtBrPos = strpos($textContent, '<br/>');
 
-        if ($fisrtBrPos <= 200) {
+        if ($fisrtBrPos <= $exerptLength) {
             $exerptLength = $fisrtBrPos;
         }
         return substr($textContent, 0, $exerptLength);

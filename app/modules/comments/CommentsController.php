@@ -5,7 +5,6 @@ use framework\HTTPrequest;
 use framework\Application;
 use framework\Controller;
 use framework\Manager;
-use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\entity\Comment;
 
@@ -13,7 +12,7 @@ class CommentsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        $nbComments = 10;
+        $nbComments = $this->app->config()->get('nb_comments');
         $filters['removed'] = '=' . 0;
 
         $nbPages = (int)ceil($this->commentManager->count($filters) / $nbComments);//Arrondi au nombre entier supérieur
@@ -66,7 +65,7 @@ class CommentsController extends Controller
 
     public function executeIndexByMember(HTTPRequest $request)
     {
-        $nbComments = 10;
+        $nbComments = $this->app->config()->get('nb_comments');
         $memberId = (int)$request->getData('member');
         $index = (int)$request->getData('index');
 

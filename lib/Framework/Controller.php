@@ -11,7 +11,6 @@ use forteroche\vendor\model\PostManager;
 use forteroche\vendor\model\CommentManager;
 use forteroche\vendor\model\MemberManager;
 use forteroche\vendor\model\ReportManager;
-//use forteroche\vendor\entity\Post;
 
 class Controller extends ApplicationComponent
 {
@@ -24,14 +23,14 @@ class Controller extends ApplicationComponent
     protected $memberManager = null;
     protected $reportManager = null;
 
-    public function __construct(Application $app, $module, $action)
+    public function __construct(Application $app, $module, $action, array $dbConnexion)
     {
         parent::__construct($app);
 
-        $this->postManager = new PostManager(PDOFactory::getMysqlConnexion());
-        $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion());
-        $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion());
-        $this->reportManager = new ReportManager(PDOFactory::getMysqlConnexion());
+        $this->postManager = new PostManager(PDOFactory::getMysqlConnexion($dbConnexion));
+        $this->commentManager = new CommentManager(PDOFactory::getMysqlConnexion($dbConnexion));
+        $this->memberManager = new MemberManager(PDOFactory::getMysqlConnexion($dbConnexion));
+        $this->reportManager = new ReportManager(PDOFactory::getMysqlConnexion($dbConnexion));
         $this->page = new Page($app);
         $this->module = $module;
         $this->action = $action;

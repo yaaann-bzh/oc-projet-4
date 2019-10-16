@@ -5,9 +5,7 @@ use framework\HTTPrequest;
 use framework\Application;
 use framework\Controller;
 use framework\Manager;
-use framework\PDOFactory;
 use framework\Page;
-//use forteroche\vendor\model\MemberManager;
 
 class ConnexionController extends Controller
 {

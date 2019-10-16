@@ -20,7 +20,7 @@ class Administration extends Application
         }
         else
         {
-            $controller = new modules\connexion\ConnexionController($this, 'connexion', 'index');
+            $controller = new modules\connexion\ConnexionController($this, 'connexion', 'index', $this->getDBConnexion());
         }
 
         $controller->execute();

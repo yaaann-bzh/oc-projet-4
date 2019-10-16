@@ -5,7 +5,6 @@ use framework\HTTPrequest;
 use framework\Application;
 use framework\Controller;
 use framework\Manager;
-use framework\PDOFactory;
 use framework\Page;
 use forteroche\vendor\entity\Post;
 
@@ -13,10 +12,11 @@ class PostsController extends Controller
 {
     public function executeIndex(HTTPRequest $request)
     {
-        // Insérer redirection vers index-1 si url ='/' pour éviter duplication de contenu
-        $nbPosts = 5;
+        $nbPosts = $this->app->config()->get('nb_posts');
         $nbPages = (int)ceil($this->postManager->count() / $nbPosts);//Arrondi au nombre entier supérieur
         $this->page->addVars('nbPages', $nbPages);
+
+        $exerptLength = $this->app->config()->get('nb_chars');
 
         $index = (int)$request->getData('index');
     
@@ -53,8 +53,10 @@ class PostsController extends Controller
         foreach ($postsList as $post) {
             $filters['postId'] = '=' . $post->id();
             $nbComments[$post->id()] = $this->commentManager->count($filters);
+            $exerpt[$post->id()] = $post->getExerpt($exerptLength);
         }
         $this->page->addVars('nbComments', $nbComments);
+        $this->page->addVars('exerpt', $exerpt);
 
         $this->page->setTabTitle('Accueil');
         $this->page->setActiveNav('home');
