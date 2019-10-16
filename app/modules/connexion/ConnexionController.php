@@ -35,7 +35,7 @@ class ConnexionController extends Controller
                         $this->memberManager->saveConnexionId($member->id(), $connexionId);         
                     }
 
-                    $this->app->httpResponse()->redirect('/');
+                    return $this->app->httpResponse()->redirect('/');
 
                 } else {
                     $this->page->addVars('invalid', true);

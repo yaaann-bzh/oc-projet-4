@@ -42,7 +42,7 @@ class CommentsController extends Controller
 
         $comments = $this->commentManager->getList($begin, $nbComments, $filters);
         if ($index !== 1 AND empty($comments)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
 
         $posts = [];
@@ -72,7 +72,7 @@ class CommentsController extends Controller
 
         $member = $this->memberManager->getSingle($memberId);
         if (empty($member)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
         $this->page->addVars('member', $member);
 
@@ -102,7 +102,7 @@ class CommentsController extends Controller
 
         $comments = $this->commentManager->getList($begin, $nbComments, $filters);
         if ($index !== 1 AND empty($comments)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
 
         $posts = [];
@@ -138,7 +138,7 @@ class CommentsController extends Controller
                     $this->commentManager->add($memberId, $postId, $content);
                 }
 
-                $this->app->httpResponse()->redirect('/post-' . $postId . '#comments');
+                return $this->app->httpResponse()->redirect('/post-' . $postId . '#comments');
 
             } catch (\Exception $e) {
                 $intro = 'Erreur lors de l\'ajout du commentaire';
@@ -155,7 +155,7 @@ class CommentsController extends Controller
         $updated = $request->getData('updated');
         $comment = $this->commentManager->getSingle($commentId);
         if (empty($comment)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         } 
 
         if ($request->postExists('action')) {
@@ -175,7 +175,7 @@ class CommentsController extends Controller
                     break;
                 }
 
-                $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
+                return $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
 
             } catch (\Exception $e) {
                 $intro = 'Erreur lors de la modification du commentaire';
@@ -191,7 +191,7 @@ class CommentsController extends Controller
 
         if ($userId !== (int)$member->id()) {
             if ($privilege === null) {
-                $this->app->httpResponse()->redirect403();
+                return $this->app->httpResponse()->redirect403();
             }
         }
 

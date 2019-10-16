@@ -45,7 +45,7 @@ class PostsController extends Controller
 
         $postsList = $this->postManager->getList($begin, $nbPosts);
         if ($request->getData('index') !== null AND empty($postsList)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
         $this->page->addVars('postsList', $postsList);
 
@@ -69,7 +69,7 @@ class PostsController extends Controller
         $post = $this->postManager->getSingle($id);
 
         if (empty($post)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
 
         $filters['postId'] = '=' . $id;
@@ -136,7 +136,7 @@ class PostsController extends Controller
                 ]);
 
                 $this->postManager->add($post);
-                $this->app->httpResponse()->redirect('/post-' . $post->id());
+                return $this->app->httpResponse()->redirect('/post-' . $post->id());
                 
             } catch (\Exception $e) {
                 $message = $e->getMessage();
@@ -158,7 +158,7 @@ class PostsController extends Controller
         $post = $this->postManager->getSingle($postId);
 
         if (empty($post)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
 
         if ($request->postExists('action')) {
@@ -168,13 +168,13 @@ class PostsController extends Controller
                         $title = $request->postData('title');
                         $content = $request->postData('content');
                         $this->postManager->update($post->id(), $title, $content);
-                        $this->app->httpResponse()->redirect('/post-' . $postId . '-updated');
+                        return $this->app->httpResponse()->redirect('/post-' . $postId . '-updated');
                     break;
 
                     case 'Supprimer': 
                         $this->postManager->delete($post->id());
                         $this->commentManager->deleteFromPost($post->id());
-                        $this->app->httpResponse()->redirect('/');
+                        return $this->app->httpResponse()->redirect('/');
                     break;
                 }
 

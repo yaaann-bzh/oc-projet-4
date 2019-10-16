@@ -42,7 +42,7 @@ class ReportsController extends Controller
 
         $reportedComments = $this->commentManager->getList($begin, $nbReportedComments, $reported);
         if ($request->getData('index') !== null AND $index !== 1 AND empty($reportedComments)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
         $this->page->addVars('reportedComments', $reportedComments);
 
@@ -69,7 +69,7 @@ class ReportsController extends Controller
         $commentId = (int)$request->getData('comment');
         $comment = $this->commentManager->getSingle($commentId);
         if (empty($comment)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
         $member = $this->memberManager->getSingle($comment->memberId());
         $post = $this->postManager->getSingle($comment->postId());
@@ -107,7 +107,7 @@ class ReportsController extends Controller
         $reports = $this->reportManager->getList(null, null, $filter);
 
         if (empty($comment) OR empty($reports)) {
-            $this->app->httpResponse()->redirect404();
+            return $this->app->httpResponse()->redirect404();
         }
         
         $members = [];
@@ -132,7 +132,7 @@ class ReportsController extends Controller
 
                 $this->reportManager->clear($commentId);
                 $this->commentManager->clearReports($commentId);
-                $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
+                return $this->app->httpResponse()->redirect('/user/comment-' . $commentId . $suffixe);
 
             } catch (\Exception $e) {
                 $intro = 'Erreur lors de la modification du commentaire';
