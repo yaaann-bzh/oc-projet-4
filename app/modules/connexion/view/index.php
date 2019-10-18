@@ -28,7 +28,7 @@
         </div>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Se connecter</button>
         <div class="form-label-group">
-            <p class="m-4 text-center">Nouveau sur le site ? <a href="#">S'inscrire</a></p>
+            <p class="m-4 text-center">Nouveau sur le site ? <a href="/inscription">S'inscrire</a></p>
         </div>
     </form>
 </div>

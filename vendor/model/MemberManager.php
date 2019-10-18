@@ -1,6 +1,8 @@
 <?php
 namespace forteroche\vendor\model;
 
+use forteroche\vendor\entity\Member;
+
 class MemberManager extends \framework\Manager 
 {
     public function getSingle($id)
@@ -14,6 +16,9 @@ class MemberManager extends \framework\Manager
         if ($member = $req->fetch())
         {
             $member->setInscriptionDate(new \DateTime($member->inscriptionDate()));
+            if ($member->deleteDate() != null) {
+                $member->setDeleteDate(new \DateTime($member->deleteDate()));
+            }
             return $member;
         }
         
@@ -78,5 +83,18 @@ class MemberManager extends \framework\Manager
         }
         
         return null; 
+    }
+
+    public function add(Member $member)
+    {
+        $req = $this->dao->prepare('INSERT INTO members SET pseudo = :pseudo, email = :email, pass = :pass, lastname = :lastname, firstname = :firstname, inscriptionDate = NOW()');
+        
+        $req->bindValue(':pseudo', $member->pseudo());
+        $req->bindValue(':email', $member->email());
+        $req->bindValue(':pass', $member->pass());
+        $req->bindValue(':lastname', $member->lastname());
+        $req->bindValue(':firstname', $member->firstname());
+        
+        $req->execute();
     }
 }

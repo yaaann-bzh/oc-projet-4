@@ -8,9 +8,10 @@ class Member
     protected $pseudo;
     protected $email;
     protected $pass;
-    protected $memberName;
+    protected $lastname;
     protected $firstname;
     protected $inscriptionDate;
+    protected $deleteDate;
     protected $connexionId;
 
     //Mother
@@ -41,7 +42,7 @@ class Member
     {
         if (!is_string($pseudo) || empty($pseudo))
         {
-            throw new Exception('Pseudo non valide');
+            throw new \Exception('Pseudo non valide');
         }
 
         $this->pseudo = $pseudo;
@@ -49,9 +50,9 @@ class Member
 
     public function setEmail($email)
     {
-        if (!preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['mail']))
+        if (!preg_match("#^[a-z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$#", $_POST['email']))
         {
-            throw new Exception('Adresse email non valide');
+            throw new\ Exception('Adresse email non valide');
         }
 
         $this->email = $email;
@@ -61,27 +62,27 @@ class Member
     {
         if (!is_string($pass) || empty($pass))
         {
-            throw new Exception('Mot de passe non valide');
+            throw new\ Exception('Mot de passe non valide');
         }
 
         $this->pass = $pass;
     }
 
-    public function setMemberName($memberName)
+    public function setLastname($lastname)
     {
-        if (!is_string($memberName) || empty($memberName))
+        if (!is_string($lastname) || empty($lastname))
         {
-            throw new Exception('Nom non valide');
+            throw new\ Exception('Nom non valide');
         }
 
-        $this->memberName = $memberName;
+        $this->lastname = $lastname;
     }
 
     public function setFirstname($firstname)
     {
         if (!is_string($firstname) || empty($firstname))
         {
-            throw new Exception('Prénom non valide');
+            throw new\ Exception('Prénom non valide');
         }
 
         $this->firstname = $firstname;
@@ -92,11 +93,16 @@ class Member
         $this->inscriptionDate = $inscriptionDate;
     }
 
+    public function setDeleteDate(\DateTime $deleteDate)
+    {
+        $this->deleteDate = $deleteDate;
+    }
+
     public function setConnexionId($connexionId)
     {
         if (!is_string($connexionId) || empty($connexionId))
         {
-            throw new Exception('Le système a rencontré un problème : connexionId');
+            throw new\ Exception('Le système a rencontré un problème : connexionId');
         }
 
         $this->connexionId = $connexionId;
@@ -128,9 +134,14 @@ class Member
         return $this->pass;
     }
 
-    public function completeName()
+    public function lastname()
     {
-        return $this->memberName . ' ' . $this->firstname;
+        return $this->lastname;
+    }
+
+    public function firstname()
+    {
+        return $this->firstname;
     }
 
     public function inscriptionDate()
@@ -138,6 +149,11 @@ class Member
         return $this->inscriptionDate;
     }
 
+    public function deleteDate()
+    {
+        return $this->deleteDate;
+    }
+    
     public function connexionId()
     {
         return $this->connexionId;

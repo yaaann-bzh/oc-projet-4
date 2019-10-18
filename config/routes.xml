@@ -10,6 +10,8 @@
     <route url="/user" module="connexion" action="index" ></route>
     <route url="/deconnection" module="connexion" action="disconnect" ></route>
 
+    <route url="/inscription" module="members" action="inscription"></route>
+
     <route url="/user/insert-comment-([0-9]+)" module="comments" action="insert" vars="post"></route>
     <route url="/user/comment-([0-9]+)-?(updated)?" module="comments" action="show" vars="comment,updated"></route>
     <route url="/user/comment-report-([0-9]+)" module="reports" action="report" vars="comment"></route>

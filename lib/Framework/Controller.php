@@ -75,11 +75,12 @@ class Controller extends ApplicationComponent
         if ($auth !== null) {
             $member = $this->memberManager->checkConnexionId($auth);
             if ($member !== null) {
-
-                $this->app->user()->setAuthenticated(true);
-                $this->app->user()->setAttribute('id', $member->id());
-                $this->app->user()->setAttribute('pseudo', $member->pseudo());
-                $this->app->user()->setAttribute('privilege', $member->privilege());
+                if ($member->deleteDate() === null) {
+                    $this->app->user()->setAuthenticated(true);
+                    $this->app->user()->setAttribute('id', $member->id());
+                    $this->app->user()->setAttribute('pseudo', $member->pseudo());
+                    $this->app->user()->setAttribute('privilege', $member->privilege());
+                }
             }
         }  
     }
