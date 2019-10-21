@@ -5,8 +5,11 @@ use forteroche\vendor\entity\Post;
 
 class PostManager extends \framework\Manager 
 {
+    protected $entities = 'posts';
+
     public function getList($debut, $limit, $filters = []) {
-        $sql = 'SELECT * FROM posts ORDER BY id DESC';
+
+        $sql = 'SELECT * FROM ' . $this->table . ' ORDER BY id DESC';
 
         if (isset($debut) && isset($limit)) {
             $sql .= ' LIMIT ' .(int) $limit.' OFFSET '.(int) $debut; 
@@ -31,7 +34,9 @@ class PostManager extends \framework\Manager
 
     public function getSingle($id)
     {
-        $req = $this->dao->prepare('SELECT * FROM posts WHERE id = :id');
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+
+        $req = $this->dao->prepare($sql);
         $req->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $req->execute();
         
@@ -50,12 +55,16 @@ class PostManager extends \framework\Manager
     }
 
     public function count(){
-        return (int)$this->dao->query('SELECT COUNT(*) FROM posts')->fetchColumn();
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
+
+        return (int)$this->dao->query($sql)->fetchColumn();
     }
 
     public function add(Post $post)
     {
-        $req = $this->dao->prepare('INSERT INTO posts SET authorId = :authorId, title = :title, content = :content, addDate = NOW()');
+        $sql = 'INSERT INTO ' . $this->table . ' SET authorId = :authorId, title = :title, content = :content, addDate = NOW()';
+
+        $req = $this->dao->prepare($sql);
         
         $req->bindValue(':authorId', $post->authorId(), \PDO::PARAM_INT);
         $req->bindValue(':title', $post->title());
@@ -68,7 +77,9 @@ class PostManager extends \framework\Manager
 
     public function update($id, $title, $content)
     {
-        $q = $this->dao->prepare('UPDATE posts SET title = :title, content = :content, updateDate = NOW() WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET title = :title, content = :content, updateDate = NOW() WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':title', $title);
         $q->bindValue(':content', $content);
@@ -79,12 +90,14 @@ class PostManager extends \framework\Manager
 
     public function delete($id)
     {
-        $this->dao->exec('DELETE FROM posts WHERE id = '.(int) $id);
+        $sql = 'DELETE FROM ' . $this->table . ' WHERE id = '.(int) $id;
+        $this->dao->exec($sql);
     }
 
     public function getIdList()
     {
-        $req = $this->dao->query('SELECT id FROM posts');
+        $sql = 'SELECT id FROM ' . $this->table;
+        $req = $this->dao->query($sql);
         $req->setFetchMode(\PDO::FETCH_ASSOC);
         $res = $req->fetchAll();
         $idList = [];

@@ -50,13 +50,14 @@ class PostsController extends Controller
         $this->page->addVars('postsList', $postsList);
 
         $nbComments = [];
+        $exerpts = [];
         foreach ($postsList as $post) {
             $filters['postId'] = '=' . $post->id();
             $nbComments[$post->id()] = $this->commentManager->count($filters);
-            $exerpt[$post->id()] = $post->getExerpt($exerptLength);
+            $exerpts[$post->id()] = $post->getExerpt($exerptLength);
         }
         $this->page->addVars('nbComments', $nbComments);
-        $this->page->addVars('exerpt', $exerpt);
+        $this->page->addVars('exerpts', $exerpts);
 
         $this->page->setTabTitle('Accueil');
         $this->page->setActiveNav('home');

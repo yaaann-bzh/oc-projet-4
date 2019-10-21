@@ -3,9 +3,10 @@ namespace forteroche\vendor\model;
 
 class ReportManager extends \framework\Manager 
 {
+    protected $entities = 'reports';
 
     public function getList($debut, $fin, $filters = []){
-        $sql = 'SELECT * FROM reports';
+        $sql = 'SELECT * FROM ' . $this->table;
 
         if (!empty($filters)) {
             $sql .= ' WHERE ';
@@ -36,12 +37,14 @@ class ReportManager extends \framework\Manager
     }
 
     public function countComments() {
-        return (int)$this->dao->query('SELECT COUNT(*) FROM reports GROUP BY commentId')->fetchColumn();
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table . ' GROUP BY commentId';
+        
+        return (int)$this->dao->query($sql)->fetchColumn();
     }
 
     public function count($filters=[])
     {
-        $sql = 'SELECT COUNT(*) FROM reports';
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
 
         if (!empty($filters)) {
             $sql .= ' WHERE ';
@@ -55,7 +58,9 @@ class ReportManager extends \framework\Manager
 
     public function add($authorId, $commentId, $content, $commentContent)
     {
-        $q = $this->dao->prepare('INSERT INTO reports SET authorId = :authorId, commentId = :commentId, content = :content, commentContent = :commentContent, reportDate = NOW()');
+        $sql = 'INSERT INTO ' . $this->table . ' SET authorId = :authorId, commentId = :commentId, content = :content, commentContent = :commentContent, reportDate = NOW()';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':authorId', $authorId);
         $q->bindValue(':commentId', $commentId);
@@ -67,14 +72,16 @@ class ReportManager extends \framework\Manager
 
     public function getId($commentId, $authorId)
     {
-        $sql = 'SELECT id FROM reports WHERE commentId=' . $commentId . ' AND authorId=' . $authorId;
+        $sql = 'SELECT id FROM ' . $this->table . ' WHERE commentId=' . $commentId . ' AND authorId=' . $authorId;
 
         return $this->dao->query($sql)->fetchColumn();
     }
 
     public function getSingle($id)
     {
-        $req = $this->dao->prepare('SELECT * FROM reports WHERE id = :id');
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+
+        $req = $this->dao->prepare($sql);
         $req->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $req->execute();
         
@@ -91,6 +98,7 @@ class ReportManager extends \framework\Manager
 
     public function clear($commentId)
     {
-        $this->dao->exec('DELETE FROM reports WHERE commentId = '.(int) $commentId);
+        $sql = 'DELETE FROM ' . $this->table . ' WHERE commentId = '.(int) $commentId;
+        $this->dao->exec($sql);
     }
 }
