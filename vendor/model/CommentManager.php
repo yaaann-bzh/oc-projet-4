@@ -55,6 +55,9 @@ class CommentManager extends \framework\Manager
             if ($comment->updateDate() != null) {
                 $comment->setUpdateDate(new \DateTime($comment->updateDate()));
             }
+            if ($comment->reportDate() != null) {
+                $comment->setReportDate(new \DateTime($comment->reportDate()));
+            }
             return $comment;
         }
         
