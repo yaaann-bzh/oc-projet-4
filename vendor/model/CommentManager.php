@@ -3,9 +3,11 @@ namespace forteroche\vendor\model;
 
 class CommentManager extends \framework\Manager 
 {
+    protected $entities = 'comments';
+
     public function getList($debut, $limit, $filters=[])
     {
-        $sql = 'SELECT * FROM comments';
+        $sql = 'SELECT * FROM ' . $this->table;
 
         if (!empty($filters)) {
             $sql .= ' WHERE ';
@@ -43,7 +45,8 @@ class CommentManager extends \framework\Manager
 
     public function getSingle($id)
     {
-        $req = $this->dao->prepare('SELECT * FROM comments WHERE id = :id');
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+        $req = $this->dao->prepare($sql);
         $req->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $req->execute();
         
@@ -66,7 +69,7 @@ class CommentManager extends \framework\Manager
 
     public function count($filters=[])
     {
-        $sql = 'SELECT COUNT(*) FROM comments';
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
 
         if (!empty($filters)) {
             $sql .= ' WHERE ';
@@ -80,7 +83,9 @@ class CommentManager extends \framework\Manager
 
     public function add($memberId, $postId, $content)
     {
-        $q = $this->dao->prepare('INSERT INTO comments SET memberId = :memberId, postId = :postId, content = :content, addDate = NOW()');
+        $sql = 'INSERT INTO ' . $this->table . ' SET memberId = :memberId, postId = :postId, content = :content, addDate = NOW()';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':memberId', $memberId);
         $q->bindValue(':postId', $postId);
@@ -91,7 +96,9 @@ class CommentManager extends \framework\Manager
 
     public function update($id, $content)
     {
-        $q = $this->dao->prepare('UPDATE comments SET content = :content, updateDate = NOW() WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET content = :content, updateDate = NOW() WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':content', $content);
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
@@ -101,7 +108,9 @@ class CommentManager extends \framework\Manager
 
     public function delete($id)
     {
-        $q = $this->dao->prepare('UPDATE comments SET removed = 1, updateDate = NOW() WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET removed = 1, updateDate = NOW() WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
 
@@ -110,12 +119,16 @@ class CommentManager extends \framework\Manager
 
     public function deleteFromPost($postId)
     {
-        $this->dao->exec('DELETE FROM comments WHERE postId = '.(int) $postId);
+        $sql = 'DELETE FROM ' . $this->table . ' WHERE postId = '.(int) $postId;
+
+        $this->dao->exec($sql);
     }
 
     public function setReported($id)
     {
-        $q = $this->dao->prepare('UPDATE comments SET reportDate = NOW() WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET reportDate = NOW() WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
 
@@ -124,7 +137,9 @@ class CommentManager extends \framework\Manager
 
     public function clearReports($id)
     {
-        $q = $this->dao->prepare('UPDATE comments SET reportDate = NULL WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET reportDate = NULL WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
 
