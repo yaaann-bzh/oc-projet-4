@@ -30,7 +30,7 @@
             <div class="border p-3">
                 <div>
                     <div class="d-flex w-100 justify-content-between align-item-center">
-                        <?php if ($user->isAuthenticated()) { ?>
+                        <?php if ($user->isAuthenticated() AND $user->isAdmin()) { ?>
                             <p class="mb-2 text-right"><a class="text-white bg-primary p-1" href="/admin/post-<?= $post->id(); ?>">Modifier la publication</a></p>
                         <?php } ?>
                         <p class="mb-2 text-right"><a class="p-1" href="#comments">Commentaires <i class="fas fa-long-arrow-alt-down"></i></a></p>
