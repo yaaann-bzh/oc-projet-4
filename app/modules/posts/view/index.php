@@ -49,7 +49,7 @@
 
                     </div>
                     <div class="collapse" id="postContent-<?= $post->id(); ?>" style="">
-                        <p><?= $exerpt[$post->id()]; ?> ... | <a href="post-<?= $post->id(); ?>">Lire la suite</a></p>
+                        <p><?= $exerpts[$post->id()]; ?> ... | <a href="post-<?= $post->id(); ?>">Lire la suite</a></p>
                     </div>
                 </div>              
                 <?php
