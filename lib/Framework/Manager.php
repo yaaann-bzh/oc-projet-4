@@ -36,8 +36,20 @@ abstract class Manager
 
     public abstract function getList($debut, $limit, $filters = []);
 
-    public abstract function count();
+    public function count($filters=[])
+    {
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
 
+        if (!empty($filters)) {
+            $sql .= ' WHERE ';
+            foreach ($filters as $key => $filter) {
+                $sql .= $key . $filter . ' AND ';
+            }
+            $sql = substr($sql, 0, -5);
+        }
+        return (int)$this->dao->query($sql)->fetchColumn();
+    }
+    
     public function exists($id)
     {
         $className = get_class($this);

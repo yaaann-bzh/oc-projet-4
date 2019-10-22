@@ -33,19 +33,6 @@ class MemberManager extends \framework\Manager
         # code...
     }
 
-    public function count($admin = null)
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
-
-        if ($admin === true) {
-            $sql .= ' WHERE admin=1';
-        } elseif ($admin === false) {
-            $sql .= ' WHERE admin=0';
-        }
-
-        return (int)$this->dao->query($sql)->fetchColumn();
-    }
-
     public function getId($var)
     {
         $key = '';
@@ -106,5 +93,35 @@ class MemberManager extends \framework\Manager
         $req->bindValue(':firstname', $member->firstname());
         
         $req->execute();
+    }
+
+    public function update($id, array $values)
+    {
+        $sql = 'UPDATE ' . $this->table . ' SET ';
+
+        foreach ($values as $key => $value) {
+            $sql .= $key . ' = :' . $key . ', ';
+        }
+
+        $sql = substr($sql, 0, -2);
+
+        $sql .= ' WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
+        
+        foreach ($values as $key => $value) {
+            $qkey = ':' . $key;
+            $q->bindValue($qkey , $value);
+        }
+        
+        $q->bindValue(':id', $id, \PDO::PARAM_INT);
+
+        $q->execute();
+    }
+
+    public function delete($id)
+    {
+        $sql = 'DELETE FROM ' . $this->table . ' WHERE id = '.(int) $id;
+        $this->dao->exec($sql);
     }
 }

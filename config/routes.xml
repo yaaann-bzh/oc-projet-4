@@ -15,6 +15,10 @@
     <route url="/user/insert-comment-([0-9]+)" module="comments" action="insert" vars="post"></route>
     <route url="/user/comment-([0-9]+)-?(updated)?" module="comments" action="show" vars="comment,updated"></route>
     <route url="/user/comment-report-([0-9]+)" module="reports" action="report" vars="comment"></route>
+    <route url="/user/profile-([0-9]+)-?(updated)?" module="members" action="show" vars="member,updated"></route>
+    <route url="/user/password-update-([0-9]+)" module="members" action="passwordUpdate" vars="member"></route>
+    <route url="/user/update-([0-9]+)" module="members" action="update" vars="member"></route>
+    <route url="/user/delete-([0-9]+)" module="members" action="delete" vars="member"></route>
 
     <route url="/admin/" module="posts" action="index" ></route>
     <route url="/admin/redaction" module="posts" action="redaction"></route>

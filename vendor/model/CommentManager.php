@@ -67,20 +67,6 @@ class CommentManager extends \framework\Manager
         return null;  
     }
 
-    public function count($filters=[])
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
-
-        if (!empty($filters)) {
-            $sql .= ' WHERE ';
-            foreach ($filters as $key => $filter) {
-                $sql .= $key . $filter . ' AND ';
-            }
-            $sql = substr($sql, 0, -5);
-        }
-        return (int)$this->dao->query($sql)->fetchColumn();
-    }
-
     public function add($memberId, $postId, $content)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET memberId = :memberId, postId = :postId, content = :content, addDate = NOW()';

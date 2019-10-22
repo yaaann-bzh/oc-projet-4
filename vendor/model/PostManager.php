@@ -54,12 +54,6 @@ class PostManager extends \framework\Manager
         return null;  
     }
 
-    public function count(){
-        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
-
-        return (int)$this->dao->query($sql)->fetchColumn();
-    }
-
     public function add(Post $post)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET authorId = :authorId, title = :title, content = :content, addDate = NOW()';

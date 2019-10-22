@@ -42,20 +42,6 @@ class ReportManager extends \framework\Manager
         return (int)$this->dao->query($sql)->fetchColumn();
     }
 
-    public function count($filters=[])
-    {
-        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
-
-        if (!empty($filters)) {
-            $sql .= ' WHERE ';
-            foreach ($filters as $key => $filter) {
-                $sql .= $key . $filter . ' AND ';
-            }
-            $sql = substr($sql, 0, -5);
-        }
-        return (int)$this->dao->query($sql)->fetchColumn();
-    }
-
     public function add($authorId, $commentId, $content, $commentContent)
     {
         $sql = 'INSERT INTO ' . $this->table . ' SET authorId = :authorId, commentId = :commentId, content = :content, commentContent = :commentContent, reportDate = NOW()';
