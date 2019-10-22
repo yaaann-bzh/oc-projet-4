@@ -1,7 +1,0 @@
-# SET ENCODING UTF-8 FOR ALL FILES
-AddDefaultCharset utf-8
-AddCharset UTF-8 .js
-AddCharset UTF-8 .php
-AddType 'application/javascript; charset=UTF-8' js
-
-

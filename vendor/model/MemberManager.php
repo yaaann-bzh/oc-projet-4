@@ -5,9 +5,13 @@ use forteroche\vendor\entity\Member;
 
 class MemberManager extends \framework\Manager 
 {
+    protected $entities = 'members';
+
     public function getSingle($id)
     {
-        $req = $this->dao->prepare('SELECT * FROM members WHERE id = :id');
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE id = :id';
+
+        $req = $this->dao->prepare($sql);
         $req->bindValue(':id', (int) $id, \PDO::PARAM_INT);
         $req->execute();
         
@@ -31,7 +35,7 @@ class MemberManager extends \framework\Manager
 
     public function count($admin = null)
     {
-        $sql = 'SELECT COUNT(*) FROM member';
+        $sql = 'SELECT COUNT(*) FROM ' . $this->table;
 
         if ($admin === true) {
             $sql .= ' WHERE admin=1';
@@ -54,13 +58,15 @@ class MemberManager extends \framework\Manager
             $key = 'pseudo';
         }
 
-        $sql = 'SELECT id FROM members WHERE ' . $key . '="' . $var . '"';
+        $sql = 'SELECT id FROM ' . $this->table . ' WHERE ' . $key . '="' . $var . '"';
         return $this->dao->query($sql)->fetchColumn();
     }
 
     public function saveConnexionId($id, $connexionId)
     {
-        $q = $this->dao->prepare('UPDATE members SET connexionId = :connexionId WHERE id = :id');
+        $sql = 'UPDATE ' . $this->table . ' SET connexionId = :connexionId WHERE id = :id';
+
+        $q = $this->dao->prepare($sql);
         
         $q->bindValue(':connexionId', $connexionId);
         $q->bindValue(':id', $id, \PDO::PARAM_INT);
@@ -70,7 +76,9 @@ class MemberManager extends \framework\Manager
 
     public function checkConnexionId($connexionId)
     {
-        $req = $this->dao->prepare('SELECT * FROM members WHERE connexionId = :connexionId');
+        $sql = 'SELECT * FROM ' . $this->table . ' WHERE connexionId = :connexionId';
+
+        $req = $this->dao->prepare($sql);
         $req->bindValue(':connexionId', $connexionId);
         $req->execute();
         
@@ -87,7 +95,9 @@ class MemberManager extends \framework\Manager
 
     public function add(Member $member)
     {
-        $req = $this->dao->prepare('INSERT INTO members SET pseudo = :pseudo, email = :email, pass = :pass, lastname = :lastname, firstname = :firstname, inscriptionDate = NOW()');
+        $sql = 'INSERT INTO ' . $this->table . ' SET pseudo = :pseudo, email = :email, pass = :pass, lastname = :lastname, firstname = :firstname, inscriptionDate = NOW()';
+
+        $req = $this->dao->prepare($sql);
         
         $req->bindValue(':pseudo', $member->pseudo());
         $req->bindValue(':email', $member->email());
