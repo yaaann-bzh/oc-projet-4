@@ -38,6 +38,7 @@
                     <h1 class="display-5 w-100"><?= $post->title(); ?></h1>
 
                 </div>
+                <p class="lead">Par <?= htmlspecialchars($author->pseudo()); ?></p>
                 <p> 
                     <em>Publié le <?= $post->addDate()->format('d/m/Y à H\hi'); ?></em>
                     <?php

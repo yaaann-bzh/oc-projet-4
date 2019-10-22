@@ -75,6 +75,8 @@ class PostsController extends Controller
             return $this->app->httpResponse()->redirect404();
         }
 
+        $author = $this->memberManager->getSingle($post->authorId());
+
         $filters['postId'] = '=' . $id;
         $comments = $this->commentManager->getList(null, null, $filters);
         
@@ -115,6 +117,7 @@ class PostsController extends Controller
         $this->page->addvars('updated', $updated);
 
         $this->page->addVars('post', $post);
+        $this->page->addVars('author', $author);
         $this->page->addVars('comments', $comments);
         $this->page->addVars('members', $members);
 

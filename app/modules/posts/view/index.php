@@ -1,10 +1,11 @@
 <div class="jumbotron">
     <div class="container">
-      <h1 class="display-5">Billet simple pour l'Alaska</h1>
-      <p><em>Bienvenue sur le site de publication de mon dernier roman. Vous trouverez ici la liste des chapitres publiés.</em></p>
-      <p><strong> Excellente lecture!</strong></p>
+        <h2>Jean Forteroche</h2>
+        <h1 class="display-5">Billet simple pour l'Alaska</h1>
+        <p><em>Bienvenue sur le site de publication de mon dernier roman. Vous trouverez ici la liste des chapitres publiés.</em></p>
+        <p><strong> Excellente lecture!</strong></p>
     </div>
-  </div>
+</div>
 
 <section class="container">
     <div class="row">
